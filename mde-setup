@@ -1,0 +1,428 @@
+#!/bin/bash
+
+# mindevenviro "mde-setup" (install script; "mind eve n viro" SETUP)
+#
+# Windows 10 version compatibility for debian App
+#
+###			WARNING:	DON'T EDIT ANYTHING BELOW !!!	###
+
+LANG="C";
+myPrograms="tidy scrot terminator mercurial libpurple-dev libpurple0 libjson-glib-dev xclip xcompmgr x11-apps openvpn zip rar openssl nmap clamav-freshclam clamav-milter clamav-testfiles clamdscan clamassassin clamav clamav-base clamav-daemon php7.0 php7.0-cli php7.0-mcrypt php7.0-intl php7.0-mysql php7.0-curl php7.0-gd php7.0-soap php7.0-xml php7.0-zip php7.0-readline php7.0-opcache php7.0-json php7.0-gd dwww apache2 libmariadbclient-dev-compat default-libmysqlclient-dev mariadb-client mariadb-common mariadb-server sendmail python-gtk2-dbg liblwp-protocol-socks-perl libcgi-pm-perl perl nmon figlet mc mutt eject nano " ;
+environinstall="monitors/codecounter monitors/logdiskussage monitors/connected network/iptablestranspprox network/server-monitor network/redundanz network/shi3lD network/init/start_shield network/init/stop_shield network/init/nids-antivirus-up network/init/serv-if-up edit/search edit/sCRYPtUPdater vtwm/dwecker maintenance/mysql_cp_db maintenance/set_mysql_passwd thirdparty/tor__(test_tor_connexion).pl mde-setup " ;
+restarting="6";
+readonly empty='';
+		if [ ! $EUID = 0 ];
+	then
+		echo "USAGE: sudo mde-setup"
+		exit 0 ;
+else
+		# tmp folder
+		if [[ "$(df -h | grep -E shm$ | cut -f2 -d% | tr -d '\ ')" != '' ]] ;
+	then
+		tmpfolder="$(df -h | grep -E shm$ | cut -f2 -d% | tr -d '\ ')" ;
+	else
+		tmpfolder="/tmp" ;
+fi
+# tmp folder END
+
+		# shutting apps and servers down
+		if [[ "$(ps aux | grep -v grep | grep -v nano | grep -v geany | grep serv-if-up | awk '{print $2}' | wc -l) " -ge "1" ]] ;
+	then
+		killall -15 serv-if-up && wait ;
+		killall -15 shi3lD && wait ;
+fi
+# stop END
+
+
+
+
+	# update /etc/hosts
+	configs/./update_hosts &
+	wait ;
+
+		# environinstall
+		if [[ $PWD =~ 'mindevenviro' ]] ;
+	then
+		nNuM1=$(echo "$environinstall" | wc -w) ;
+		spin2='-\|/' ;
+
+		while [[ "$nNuM1" != "0" ]] ;
+	do
+		clear ;
+		toCopyPath=$(awk '{print $'"$nNuM1"'}'<<<"$environinstall") ;
+		fFILE=$(basename $toCopyPath) ;
+		sudo cp -f "$PWD/$toCopyPath" "/usr/local/bin/$fFILE" ;
+		sudo chown root:root "/usr/local/bin/$fFILE" ;
+		sudo chmod 4755 "/usr/local/bin/$fFILE" ;
+		sudo chmod u+s "/usr/local/bin/$fFILE" &&
+		echo -e "\n ... copying files ::\n" ;
+		i=$(( (i+1) %4 )) ; printf "\r ... ${spin2:$i:1} $fFILE ." | tee -a "/home/$SUDO_USER/.installed" ; sleep .1 ;
+		((nNuM1--)) ;
+done
+
+# environinstall END ...
+
+		if [ -e /root/.vendorsmac ] ;
+	then
+		echo -e ".vendors macs allready saved" ;
+	else
+		echo -e "\n ... save vendors MAC-Address" ;
+		touch "/root/.vendorsmac" ;
+		ip link show | grep ether | awk '{print $2}' | tee "/root/.vendorsmac" ;
+		chmod 0664 "/root/.vendorsmac" ;
+fi
+		echo -e "\n ... if you not have a WiFi device on your Board, then install one please !\n you must have only one WiFi Interface up OR one Wired.\n" ;
+
+		if [ -e /root/.interfaces ] ;
+	then
+		echo -e ".interfaces allready saved" ;
+	else
+		echo -e "\n ... save interfaces" ;
+		touch "/root/.interfaces" ;
+		ip link | cut -f2 -d: | grep -E '\ ' | tr -d '\ ' | grep -v lo | tee "/root/.interfaces" ;
+		chmod 0664 "/root/.interfaces" ;
+fi
+	echo -e "\r\n ... clearing files" ;
+	
+	rm -f /etc/apache2/sites-enabled/000-default.conf 2>/dev/null ;
+
+	# by an update clear from double entries in apache2.conf
+	sed -e '/ServerName /d' /etc/apache2/apache2.conf >| $tmpfolder/apache2.conf 2>/dev/null ;
+	cp -f $tmpfolder/apache2.conf /etc/apache2/apache2.conf 2>/dev/null ;
+
+	# by an update clear from double entries in apache2.conf
+	sed -e '/Listen /d' /etc/apache2/apache2.conf >| $tmpfolder/apache2.conf 2>/dev/null ;
+	cp -f $tmpfolder/apache2.conf /etc/apache2/apache2.conf 2>/dev/null ;
+
+	# by an update clear from double entries in clamd.conf
+	sed -e '/ScanOnAccess /d' /etc/clamav/clamd.conf  >| $tmpfolder/clamd.conf 2>/dev/null ;
+	cp -f $tmpfolder/clamd.conf /etc/clamav/clamd.conf 2>/dev/null ;
+
+	# by an update clear from double entries in clamd.conf
+	sed -e '/OnAccessMountPath /d' /etc/clamav/clamd.conf  >| $tmpfolder/clamd.conf 2>/dev/null ;
+	cp -f $tmpfolder/clamd.conf /etc/clamav/clamd.conf 2>/dev/null ;
+
+	echo -e "\n ... create /home/$SUDO_USER Directories" ;
+	mkdir -p /home/$SUDO_USER/{testphp,testbash,testperl,testpython,Downloads,Pictures,Documents,Music} ;
+	chown -R $SUDO_USER:$SUDO_USER /home/$SUDO_USER ;
+
+	echo -e "\n ... I'm going to install programs\n ... copy sources.list" ;
+	cp -f configs/etc/sources.list /etc/apt/sources.list ;
+
+	# adding an entry to /etc/apt/sources.list.d/
+	wget -q "http://deb.playonlinux.com/public.gpg" -O- | sudo apt-key add - ;
+	wget "http://deb.playonlinux.com/playonlinux_jessie.list" -O /etc/apt/sources.list.d/playonlinux.list ;
+
+	# to not install systemd related packages
+	echo -e 'Package: *systemd*\nPin: release *\nPin-Priority: -1\n' > /etc/apt/preferences.d/systemd ;
+	# install
+	apt --fix-broken install ;
+	apt-get -f -y -m install dirmngr git sudo gksu gnupg ;
+
+	# adding tors gpg key
+gpg --keyserver keys.gnupg.net --recv A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 ;
+gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add - ;
+
+	# update upgrade
+	echo -e "\n ... update upgrade clean and autoremove" ;
+	apt-get update && apt-get -f -y -m --allow-change-held-packages upgrade ;
+
+	printf "your email-address on github.com: "; read eM4il ;
+
+		if	[[ "$eM4il" != '' ]] ;
+	then
+		sudo -u $SUDO_USER ssh-keygen -t rsa -b 4096 -C "$eM4il" ;
+		eX1tC0de=$(echo $?) ;
+		wait ;
+
+		if [[ "$eX1tC0de" != 0 ]] ;
+	then
+		echo -e "\n REMEMBER ssh-keygen -t rsa -b 4096 -C your-email@server.tld \nto add a github.com account" | tee -a /home/$SUDO_USER/.installed ;
+	else
+		cat /home/$SUDO_USER/.ssh/id_rsa.pub >| /home/$SUDO_USER/yourGitHubSSHkey ;
+		echo -e "\n REMEMBER /home/$SUDO_USER/yourGitHubSSHkey, to add as a new SSH-Key under preferences in your github.com web-account." | tee -a /home/$SUDO_USER/.installed ;
+		sed -n "s/eval\ //p" /home/$SUDO_USER/.bashrc ; 
+		echo "eval $(ssh-agent -s)" >> /home/$SUDO_USER/.bashrc ;
+		sed -n "s/ssh-add\ //p" /home/$SUDO_USER/.bashrc ; 
+		echo "ssh-add ~/.ssh/id_rsa" >> /home/$SUDO_USER/.bashrc ;
+		sudo -u $SUDO_USER ssh -T git@github.com ;
+		sudo -u $SUDO_USER ssh-keygen -p ;
+	fi
+	else
+		echo " no github.com email."
+fi
+		# install debian apps
+		nNuM2=$(echo "$myPrograms" | wc -w) ;
+
+		until [[ "$nNuM2" = "0" ]] ;
+	do
+		toInst=$(awk '{print $'"$nNuM2"'}'<<<"$myPrograms") ;
+
+		if [[ "$(dpkg -l | awk '{print $2}' | sed -n "/^$toInst$/p")" != '' ]] ;
+	then
+		printf "\r ... testing for apps, $nNuM2 remaining" ; sleep .1 ; ((nNuM2--)) ;
+	else
+		if [[ "$toInst" = "sysvinit-core" ]] ;
+	then
+		# change the physiology to original
+		apt-get -f -m -y --allow-change-held-packages install "$toInst" | tee -a "/home/$SUDO_USER/.installed" ;
+		wait ;
+		sleep 1 ;
+		apPR="$toInst, INSTALLED!" ;
+		echo -e "\n$apPR" | tee -a "/home/$SUDO_USER/.installed" ;
+		cp -f /usr/share/sysvinit/inittab /etc/inittab ;
+		((nNuM2--)) ;
+else
+		echo -e "\ninstalling ${toInst}..." ;
+		apt-get -f -m -y --allow-change-held-packages install "$toInst" | tee -a "/home/$SUDO_USER/.installed" ;
+		eX1tC0de=$(echo $?);
+		wait;
+
+		if [[ "$eX1tC0de" != 0 ]];
+	then
+		apt --fix-broken install ;
+	else
+		wait ;
+		sleep 1 ;
+		apPR="$toInst, INSTALLED!" ;
+		echo -e "\n$apPR" | tee -a "/home/$SUDO_USER/.installed" ;
+		((nNuM2--)) ;
+	fi
+fi
+fi
+		if [ "$nNuM2" = "0" ]
+	then
+		echo -e "\n ... apt-get done.";
+		sleep 2;
+fi
+done
+
+### 	remove systemd
+
+		if [[ $(dpkg -l | awk '{print $2}' | sed -n '/systemd/p') =~ "systemd:"|"libsystemd0:" ]] ;
+	then
+		if [[ "$(dpkg -l | grep systemd | awk '{print $2}')" =~ systemd:i386 ]] ;
+	then
+		arch="i386" ;
+		# remove odd characters
+		apt-get -f -m -y remove --purge --auto-remove systemd:$arch ;
+		# update hwdb --usr
+		sudo systemd-hwdb --usr update
+
+		elif [[ "$(dpkg -l | grep systemd | awk '{print $2}')" =~ systemd:amd64 ]] ;
+	then
+		arch="amd64" ;
+		# remove odd characters
+		apt-get -f -m -y remove --purge --auto-remove systemd:$arch ;
+		# update hwdb --usr
+		sudo systemd-hwdb --usr update
+	else
+		echo -e "\n ... systemd allready removed" ;
+	fi
+fi
+
+# install END
+
+		if [[ "$(grep -E "root: ivo" /etc/aliases)" != '' ]] ;
+	then
+		echo -e "\n ... Alias Database newaliases allready build.\n if you want to do an other alias please edit /etc/aliases" ;
+	else
+		echo -e "\n ... updating /etc/aliases, this may take a while" ;
+		echo "root: $SUDO_USER" >> /etc/aliases ;
+		newaliases ;
+		sleep 2 ;
+		echo -e "\n ... /etc/aliases updated, you are able to read root mails." ;
+fi
+
+	echo -e "\n ... copy default apache2 site available" ;
+	cp configs/000-default.conf /etc/apache2/sites-available/ ;
+	chown -R $SUDO_USER:$SUDO_USER /etc/apache2/sites-available/000-default.conf ;
+
+	echo -e "\n ... settings for firefox-esr" ;
+
+	rm -fdR /home/"$SUDO_USER"/.mozilla/firefox/*.default ;
+	mkdir -p /home/"$SUDO_USER"/.mozilla/firefox/ar37ud1e.default ;
+	chmod 700 /home/"$SUDO_USER"/.mozilla/firefox/ar37ud1e.default ;
+	chown $SUDO_USER:$SUDO_USER /home/"$SUDO_USER"/.mozilla/firefox/ar37ud1e.default ; 
+	cp -f configs/profiles.ini /home/"$SUDO_USER"/.mozilla/firefox/ ;
+	chmod 600 /home/"$SUDO_USER"/.mozilla/firefox/profiles.ini ;
+	chown $SUDO_USER:$SUDO_USER /home/"$SUDO_USER"/.mozilla/firefox/profiles.ini ;
+	cp -f configs/prefs.js /home/"$SUDO_USER"/.mozilla/firefox/ar37ud1e.default/ ;
+	cp -f configs/prefs.js /home/"$SUDO_USER"/.prefs.js ;
+	cp -f configs/duckduckgo.xml /usr/share/firefox-esr/distribution/searchplugins/common/ ;
+	chmod 600 /home/"$SUDO_USER"/.mozilla/firefox/ar37ud1e.default/* ;
+	chown $SUDO_USER:$SUDO_USER /home/"$SUDO_USER"/.mozilla/firefox/ar37ud1e.default/* ;
+
+	echo -e "\n ... copy logoutvtwm" ;
+	cp -f configs/logoutvtwm /etc/X11/Xreset.d/ ;
+	chmod a+x /etc/X11/Xreset.d/logoutvtwm ;
+
+	echo -e "\n ... update pm-utils script to interact with laptop-mode-tools" ;
+	cp -f thirdparty/10-laptop-mode-tools /etc/pm/sleep.d/ ;
+	chmod a+x /etc/pm/sleep.d/10-laptop-mode-tools ;
+
+	echo -e "\n ... copy VLC skin" ;
+	cp -f thirdparty/MyVLCtheme.vlt /usr/share/vlc/skins2/ ;
+	chmod 755 /usr/share/vlc/skins2/MyVLCtheme.vlt ;
+	chown -R $SUDO_USER:$SUDO_USER /usr/share/vlc/skins2/MyVLCtheme.vlt ;
+
+	echo -e "\n ... installing flash player for linux" ;
+	tar -xf /home/$SUDO_USER/mindevenviro/thirdparty/flash_player_npapi_linux.x86_64.tar.gz ;
+	cp -f libflashplayer.so /usr/lib/mozilla/plugins/ ;
+	cp -rf usr/* /usr/ ;
+	rm -dRf LGPL/ usr/ libflashplayer.so license.pdf readme.txt ;
+
+	echo -e "\n ... copy .bashrc" ;
+	cp -f configs/bashrc /home/$SUDO_USER/.bashrc ;
+	chmod 644 /home/$SUDO_USER/.bashrc ;
+
+	echo -e "\n ... copy mindevenviro.xpm" ;
+	cp -f pictures/mindevenviro.xpm /usr/share/X11/xdm/pixmaps/mindevenviro.xpm ;
+	chmod 644 /usr/share/X11/xdm/pixmaps/mindevenviro.xpm ;
+
+	echo -e "\n ... copy Xresources" ;
+	cp -f configs/debian/Xresources /etc/X11/xdm/ ;
+	chmod 755 /etc/X11/xdm/Xresources ;
+
+	echo -e "\n ... copy the .xscreensaver file to /home/$SUDO_USER" ;
+	cp -f configs/debian/xscreensaver  /home/$SUDO_USER/.xscreensaver ;
+	chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xscreensaver ;
+
+	echo -e "\n ... copy the ini file to /home/$SUDO_USER/.config/mc/" ;
+	mkdir -p /home/$SUDO_USER/.config/mc 2>/dev/null ;
+	cp -f configs/ini /home/$SUDO_USER/.config/mc/ini ;
+	chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.config ;
+
+	echo -e "\n ... copy the config file to /home/$SUDO_USER/.config/terminator/config" ;
+	mkdir -p /home/$SUDO_USER/.config/terminator 2>/dev/null ;
+	cp -f configs/config /home/$SUDO_USER/.config/terminator/config ;
+	chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.config ;
+
+	echo -e "\n ... copy the .twmrc file to /home/$SUDO_USER" ;
+	cp -f configs/twmrc /home/$SUDO_USER/.twmrc ;
+	chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.twmrc ;
+
+	# Apache2 setup
+	echo -e "\n ... set the upload path for PHP scripts" ;
+	rm -f /var/www/html/index*
+	mkdir -p /var/www/html/{testphp,pics} ; 2>/dev/null ;
+	cp -f docs/pics/* /var/www/html/pics/ ;
+	cp -f docs/manual/* /var/www/html/testphp/ ;
+	chown -R www-data:www-data /var/www/html/ ;
+
+	# Antivirus
+	echo -e "ScanOnAccess True\nOnAccessMountPath /home/$SUDO_USER/Downloads" | tee -a /etc/clamav/clamd.conf ;
+
+# mkdir cgi-bin
+mkdir -p /usr/lib/cgi-bin/ 2>/dev/null;
+# add a ServerName to your conf
+echo "ServerName $(hostname)" >> /etc/apache2/apache2.conf ;
+echo "Listen 127.0.1.1:80" >> /etc/apache2/apache2.conf ;
+# updates the address for localhost
+
+		echo -e "\n ... update apache2 configuration" ;
+		a2enmod cgid ;
+		a2enmod proxy_http ;
+
+		echo -e "\n ... restarting apache2 server" ;
+		/etc/init.d/apache2 restart ;
+		# Apache2 setup END
+
+		echo -e "\n ... installing snort " ;
+		apt-get -f -m -y --allow-change-held-packages install snort ;
+		# reconfigure all
+		echo -e "\n ... reconfiguring installed packages " ;
+		dpkg --configure -a ;
+		# add i386 arch in 64bit system, to install wine32
+		echo -e "\n ... add i386 arch in 64bit system, to install wine32" ;
+		sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get -f -y -m --allow-change-held-packages install wine32 ;
+
+		if [ -e /home/$SUDO_USER/.purple/plugins/libfacebook.so ] ;
+	then
+		echo -e "\n ... If you want to update the facebook plugin, then please,\n do: rm /home/$SUDO_USER/.purple/plugins/libfacebook.so\n" ;
+	else
+		# apply facebook video/audio/text pidgin plugin purple-facebook
+		echo -e "\n ... apply facebook video/audio/text pidgin plugin purple-facebook" ;
+		cd thirdparty || exit 2 ;
+		git clone https://github.com/dequis/purple-facebook.git ;
+		cd purple-facebook || exit 2 ;
+		./autogen.sh ;
+		echo -e "\n ... compiling the code" ;
+		make && wait ;
+		make install && wait ;
+		mkdir -p /home/$SUDO_USER/.purple/plugins ;
+		echo -e "\n ... copying the plugin to /home/$SUDO_USER" ;
+		cp -f pidgin/libpurple/protocols/facebook/.libs/libfacebook.so /home/$SUDO_USER/.purple/plugins ;
+		cd ../../ || exit 2 ;
+		rm -dRf thirdparty/purple-facebook ;
+fi
+		if [[ $(ls -sh /usr/share/nano | grep -E 'Readme.rst') = '' ]] ;
+	then
+		mkdir -p /usr/share/nano-syntax-highlighting ;
+		git clone https://github.com/scopatz/nanorc.git /usr/share/nano-syntax-highlighting/
+		cp -f /usr/share/nano-syntax-highlighting/* /usr/share/nano ;
+		rm -dRf /usr/share/nano-syntax-highlighting ;
+		rm -f /usr/share/nano/install.sh ;
+	else
+		echo -e "\n ... Improved Nano Syntax Highlighting Files allready installed.\n the mantainer doesnt update the code anymore.\n"
+fi
+		# installing tor
+		apt-get -f -y -m install tor deb.torproject.org-keyring && wait ;
+		sleep 1 ;
+		# configuring torrc
+		if [[ "$(cat /etc/tor/torrc | sed -n '/DNSPort\ 53/p')" = '' ]] ;
+	then
+echo -e "\n
+VirtualAddrNetworkIPv4 10.192.0.0/10\r
+AutomapHostsOnResolve 1\r
+TransPort 9040\r
+DNSPort 53\r">>/etc/tor/torrc;
+	else
+		echo -e "\n ... tor allready configured" ;
+fi
+	echo -e "\n ... set background Pictures" ;
+	unzip -o pictures/wallpapers.zip -d /home/$SUDO_USER/Pictures ;
+	chown -R $SUDO_USER:$SUDO_USER /home/$SUDO_USER/Pictures/* ;
+
+		echo -e "\n ... set the rights for .wH0rUNSon " ;
+
+		if [ -e /home/$SUDO_USER/.wH0rUNSon ] ;
+	then
+		echo " ... .wH0rUNSon allready installed" | tee -a "/home/$SUDO_USER/.installed" ;
+	else
+		touch "/home/$SUDO_USER/.wH0rUNSon" && chown $SUDO_USER:$SUDO_USER "/home/$SUDO_USER/.wH0rUNSon" && chmod 0660 "/home/$SUDO_USER/.wH0rUNSon"  | tee -a "/home/$SUDO_USER/.installed" ;
+fi
+		# cooling
+		pwmconfig ;
+
+		# cleaning the environment
+		apt-get clean &&
+		apt -f -y -m autoremove ;
+		echo -e "\n ... successfully_installed $(date), by $USER" | tee -a /home/$SUDO_USER/.installed ;
+		echo -e "\n ... Congratulations we have M1ND3V3NV1R0 successfully installed!" ;
+		echo -e "\n ... your System will be rebooted. do you want to proceed? [y/n]: " ;
+		read -r restartORnot ;
+		
+		if [[ $restartORnot =~ y|Y|s|S|j|J ]] ;
+	then
+		until [[ $restarting = 0 ]] ;
+	do
+		((restarting--)) ;
+		printf "\r I will restart in $restarting seconds ..." ; sleep 1 ;
+done && stop_shield --stop ; init 6 
+
+	else
+		echo -e "\n ... OK!" ;
+		# start serv-if-up again.
+		redundanz --redundanz &
+		# good bye
+		echo "good bye $SUDO_USER" ;
+		exit 0 ;
+fi
+
+else
+	echo -e "\n M1ND3V3NV1R0 allready installed!\n run this script from within the folder M1ND3V3NV1R0, after installation, system will restart." ;
+	echo -e "\n you should be in the M1ND3V3NV1R0 folder."
+	exit 0 ;
+fi
+fi
