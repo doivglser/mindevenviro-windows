@@ -1,0 +1,85 @@
+#!/bin/bash
+# mindevenviro ..
+# monitors the servers and applications, defined in server-monitor
+# starts the daemon serv-if-up and monitors some piDS are up.
+###     WARNING:    DON'T EDIT ANYTHING BELOW       ###
+LANG="C" ;
+readonly empty="" ;
+		if [ ! $EUID = 0 ] ;
+	then
+		echo "USAGE: sudo redundanz -h" ;
+else
+
+# temp folder
+		if [[ "$(df -h | grep -E shm$ | cut -f2 -d% | tr -d '\ ')" != '' ]] ;
+	then
+		tmpfolder="$(df -h | grep -E shm$ | cut -f2 -d% | tr -d '\ ')" ;
+	else
+		tmpfolder="/tmp" ;
+fi
+# temp folder END
+
+FILE1="serv-if-up" ;
+FILE2="server-monitor" ;
+
+help(){
+shift 0 ;
+echo -e "hello $SUDO_USER redundanz puts serv-if-up daemon up and monitors servers reliability\n" ;
+echo -e "Usage: $0 [-m|--monitor] [-r]|[--redundanz] [-h|--help]\r" ;
+exit 0 ;
+}
+
+start_up(){
+		if [[ $(ps aux | grep -v grep | grep -v nano | grep -v geany | grep "$FILE1") = "$empty" ]]
+	then
+		setsid "$FILE1" 2>/dev/null 2>&1 < /dev/null &
+		echo "${FILE1}s PID: $(pgrep $FILE1)" ;
+fi
+}
+
+exitH4ndl3r(){
+
+		echo -e "-"
+		printf " quit? (y/n) " ; read -r
+
+		if [[ $REPLY =~ y|Y|j|J ]] ;
+	then
+		killall -15 xterm 2>/dev/null &&
+		rm -f $tmpfolder/root_mail_status &&
+		exit 0 ;
+		
+		elif [[ $REPLY =~ n|N ]] ;
+	then
+		return ;
+	else
+		return ;
+fi
+}
+
+mmonitor(){
+		while trap 'exitH4ndl3r' SIGINT ;
+	do
+		if [ -e "/home/$SUDO_USER/.installed" ] && [[ $1 = '' ]] ;
+	then
+		start_up;
+		watch -n5 "$FILE2" ;
+fi
+done
+}
+
+#ASK
+  case "$1" in
+        -m|--monitor)
+      shift 1;
+      mmonitor "$@";
+      ;;
+        -r|--redundanz)
+      shift 1;
+      start_up "$@" && exit 0 ;
+      ;;      
+   -h|--help)
+      shift 1 ;
+      help ;
+      ;;
+  esac
+fi

@@ -1,0 +1,121 @@
+#!/bin/bash
+
+# mindevenviro-debian shi3lD
+
+# Changes your MAC-ADDRESS and does a list of usable and not usable MAC-ADDRESSES in $HOME.
+# Restarts clamd and snort if failures, cuts the connected Interface connection 
+# while, changing the MAC-ADDRESS (use wicd to reconnect). ctrl+C cuts 
+# connected Interface connection and reverts the Interface to your vendors 
+# MAC-ADDRESS. For a new connection, shi3lD restarts TOR 
+# and Snort services to surf anonymously
+#
+###     WARNING:    DON'T EDIT ANYTHING BELOW       ###
+
+LANG="C";
+readonly empty='';
+		if [[ "$EUID" != 0 ]] && [[ "$(ps ax | grep -v grep | grep -v nano | grep -v geany| grep redundanz | cut -f2 -d\ ) " != "$empty" ]] ;
+	then
+		echo "USAGE: sudo shi3lD, interactively puff MACs and starting up to a new circuit" ;
+		exit 0;
+else
+nnumberr="0";
+FILE="serv-if-up";
+
+# temp folder
+		if [[ "$(df -h | grep -E shm$ | cut -f2 -d% | tr -d '\ ')" != '' ]]; 
+	then
+		tmpfolder="$(df -h | grep -E shm$ | cut -f2 -d% | tr -d '\ ')" ;
+	else
+		tmpfolder="/tmp" ;
+fi
+# temp folder END
+
+# enable ip forwarding
+echo "1" > /proc/sys/net/ipv4/ip_forward
+
+whoIfacesUP(){
+# which interface is trought the default route to the internet connected
+# works only if you have two interfaces, like: eno[0-9] | eth[0-9] | wi[a-z-0-9] | wl[a-z-0-9]
+
+		if [[ "$interface" =~ eno|eth ]] ;
+	then
+		stop_shield --stop &
+		whoUP="1" && start_shield ;
+
+		elif [[ "$interface" =~ wl|wi ]] ;
+	then
+		stop_shield --stop &
+		whoUP="2" && start_shield ;
+	else
+		stop_shield --stop &
+		whoUP="none" && findIface ;
+fi
+}
+
+findIface(){
+		clear ;
+		echo -e "\n :: D A N G E R nO shi3lD ::" ;
+		echo -e " :: .changing macaddress. :: \n" ;
+		printf "[W]iFi | [E]thernet type in: " ; read -r REPLY ;
+
+		if [[ $REPLY =~ w|W ]] ;
+	then
+		cat /root/.interfaces | head -n2 | tail -n1 > "$tmpfolder"/interface
+		interface="$(cat "$tmpfolder"/interface)" ;
+		echo -e " We run this Iface: $interface $(date | awk '{print $1,$3,$4}')\n" ;
+		whoIfacesUP ;
+
+		elif [[ $REPLY =~ e|E ]] ;
+	then
+		cat /root/.interfaces | head -n1 | tail -n1 > "$tmpfolder"/interface
+		interface="$(cat "$tmpfolder"/interface)" ;
+		echo -e " We run this Iface: $interface $(date | awk '{print $1,$3,$4}')\n" ;
+		whoIfacesUP ;
+	fi
+}
+
+exitHandler(){
+
+		echo -e "-" ;
+		printf " quit? (y/n) " ; read -r
+
+		if [[ $REPLY =~ y|Y|j|J ]] ;
+	then
+		stop_shield --stop &
+		sudo ip link set dev "$interface" address "$(cat /root/.vendorsmac | head -n"${whoUP}" | tail -n1)" && 
+		echo -e "\n You where surfing with this MAC: \n $(find /home/"$SUDO_USER"/* -name "*mac_recieves_dhcp_lease*" | grep "$(date | awk '{print $2,$6}' | sed 's/\ //g')" | xargs cat | tail -n1)\n\n your network down." &&
+		killall -15 dhclient 2>/dev/null &&
+		clear ; sleep 1 ;
+		findIface ;
+
+		elif [[ $REPLY =~ n|N|\  ]] ;
+	then
+		return ;
+fi
+}
+
+mess4ge(){
+	
+		spin='.oOo' ; i=0;
+		spin2='-\|/';
+
+		while [[ "$(ps aux | grep -E -i -w 'snort|clamd' | grep -v grep | awk '{print $11}' | grep -E 'snort|clamd' | wc -l | tr -d ' ')" = "2" ]] && [[ "$(ip link show "$interface" | grep ether | awk '{print $2}')" != "$(cat /root/.vendorsmac | head -n"${whoUP}" | tail -n1)" ]] ;
+	do
+		((nnumberr++));
+		sleep .5 ; i=$(( (i+1) %4 )) ; printf "\r ${spin2:$i:1}${spin:$i:1} UPTIME: $nnumberr" ; sleep .4 ; printf "\r" ;
+done
+}
+		while trap 'exitHandler' SIGINT;
+	do
+		if [[ "$(ip link show "$interface" 2>/dev/null | grep ether | awk '{print $2}')" = "$(cat /root/.vendorsmac | head -n"${whoUP}" 2>/dev/null | tail -n1 2>/dev/null)" ]] ;
+	then
+		sudo -u "$SUDO_USER" hi_wicd-client 2>/dev/null &
+		sleep 1 ;
+		findIface ;
+		
+		elif [[ "$(ps aux | grep -E -i -w 'snort|clamd' | grep -v grep | awk '{print $11}' | grep -E 'snort|clamd' | wc -l | tr -d ' ')" = "2" ]] && [[ "$(ip link show "$interface" 2>/dev/null | grep ether | awk '{print $2}')" != "$(cat /root/.vendorsmac | head -n"${whoUP}" 2>/dev/null | tail -n1 2>/dev/null )" ]] ;
+	then
+		mess4ge;
+fi
+done
+fi

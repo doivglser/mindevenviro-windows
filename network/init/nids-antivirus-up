@@ -1,0 +1,153 @@
+#!/bin/bash
+# mindevenviro-debian nids-antivirus-up
+###     WARNING:    DON'T EDIT ANYTHING BELOW       ###
+
+LANG="C";
+IFS=$(echo -e "\n\b");
+antivirus="clamav-daemon" ;
+nids="snort" ;
+relaynodes="tor" ;
+readonly empty='';	
+
+		if [[ "$EUID" != "0" ]] || [[ "$(ps ax | grep -v grep | grep -v nano | grep -v geany| grep redundanz | cut -f2 -d\ ) " = "$empty" ]] ;
+	then
+		echo "USAGE: sudo redundanz --help";
+	else
+# temp folder
+		if [[ "$(df -h | grep -E shm$ | cut -f2 -d% | tr -d '\ ')" != '' ]] ; 
+	then
+		tmpfolder="$(df -h | grep -E shm$ | cut -f2 -d% | tr -d '\ ')" ;
+	else
+		tmpfolder="/tmp" ;
+fi
+# temp folder END
+
+# mail
+touch "$tmpfolder/root_mail_status" ;
+# interface, shi3lD have an option to choose between Ifaces, that option must be automated.
+interface="$(cat "$tmpfolder"/interface)" ;
+
+# message
+senddingEmail(){
+cat << EOM | sendmail root@localhost
+
+$(cat "$tmpfolder/root_mail_status")
+
+EOM
+}
+
+# snortUP   
+snortUP(){	
+		if [[ $(netstat -ar) =~ 'default' ]] ; # looks in the routing table for an internet connection
+    then
+		if [[ $(ps ax | grep -v grep | grep -v nano | grep -v geany | grep "$nids") = '' ]] ;
+	then
+		/etc/init.d/"$nids" stop ;
+		sleep 2 ;
+		/etc/init.d/"$nids" start -i "$interface" -A None -D 2>/dev/null &
+		
+		if setsid "$nids" -i "$interface" -A None -D  -v -c /etc/snort/snort.conf 2>/dev/null &
+	then
+
+ps axu | grep -v grep | grep "$nids" >| "$tmpfolder/root_mail_status" ;
+
+senddingEmail &
+
+else
+
+senddingEmail &
+
+fi
+	else
+		echo "Snort is running..." ;
+fi
+else
+	echo "please connect to the internet" ;
+fi
+}
+# snortUP END
+
+# checks if clamd is up, if false restarts
+clamdUP(){
+		if [[ $(ps ax | grep -v grep | grep -v nano | grep -v geany | grep "$antivirus") = '' ]] ;
+	then
+		/etc/init.d/"$antivirus" stop ;
+		sleep 2 ;
+
+		if /etc/init.d/"$antivirus" start >| "$tmpfolder/root_mail_status" ;
+then
+
+/etc/init.d/"$antivirus" status >> "$tmpfolder/root_mail_status" ;
+
+echo "$?" >> "$tmpfolder/root_mail_status" ;
+
+senddingEmail &
+
+else
+
+/etc/init.d/"$antivirus" status >| "$tmpfolder/root_mail_status" ;
+date "+Start Attempt $antivirus, Failure Time: %H.%M" >> "$tmpfolder/root_mail_status" ;
+
+senddingEmail &
+
+fi
+	else
+		echo "ClamAV is running..." ;
+fi
+}
+# clamdUP END
+
+# checks if tor is up, if false restarts
+torUP(){
+		if [[ "$(/etc/init.d/tor status)" = "tor is not running ... failed!" ]] ;
+	then
+		/etc/init.d/"$relaynodes" stop ;
+		wait ;
+
+		if /etc/init.d/"$relaynodes" start >| "$tmpfolder/root_mail_status" ;
+then
+
+/etc/init.d/"$relaynodes" status >> "$tmpfolder/root_mail_status" ;
+
+echo "$?" >> "$tmpfolder/root_mail_status" ;
+
+senddingEmail &
+else
+
+/etc/init.d/"$relaynodes" status >| "$tmpfolder/root_mail_status" ;
+date "+Start Attempt $relaynodes, Failure Time: %H.%M" >> "$tmpfolder/root_mail_status" ;
+
+senddingEmail &
+
+fi
+	else
+		echo "$relaynodes is running..." ;
+fi
+}
+# torUP END
+
+help(){
+	echo "USAGE: sudo nids-antivirus-up --anTiVirus | nids-antivirus-up --nIDs | nids-antivirus-up --tor" ;
+	exit 0;
+	}
+
+# ASK
+  case "$1" in
+        --antivirus)
+      shift 1;
+      clamdUP "$@";
+      ;;
+	    --nids)
+      shift 1 ;
+      snortUP "$@";
+      ;;
+	    --tor)
+      shift 1 ;
+      torUP "$@";
+      ;;
+	    --help)
+      shift 1 ;
+      help "$@";
+      ;;
+  esac
+fi
