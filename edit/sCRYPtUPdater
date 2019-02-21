@@ -1,5 +1,5 @@
 #!/bin/bash
-# mindevenviro-debian sCRYPtUPdater
+# mindevenviro-windows sCRYPtUPdater
 # syntax check and update to /urs/local/bin, /var/www/testphp, /usr/lib/cgi-bin
 ###     WARNING:    DON'T EDIT ANYTHING BELOW	###
 LANG="C" ;
@@ -353,7 +353,7 @@ exit 0 ;
   case "$1" in
         -w|--workflow-interval)
       minut3S=$2
-      userHome=$3
+      userHome=$3 ;
       toshiffta=$(echo "$minut3S $userHome" | wc -w) ;
       shift "$toshiffta" ;
       maincall ;

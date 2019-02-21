@@ -5,8 +5,8 @@ the same scripts like mindevenviro-debian but without X11 - Apps
 
 		codecounter: code without blank lines, without comments and without thirdparty
 
-- Lines =4472
+- Lines =2484
 
-- Words =61898
+- Words =12474
 
-- Chars =256337
+- Chars =88725

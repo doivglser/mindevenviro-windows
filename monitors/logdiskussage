@@ -1,6 +1,8 @@
 #!/bin/bash
-# mindevenviro logdiskussage
+
+# mindevenviro-windows logdiskussage
 # shows big log files in Megabytes and monitors by hitting enter
+
 LANG="C";
 		if [[ "$EUID" != 0 ]] ;
 	then
@@ -11,7 +13,7 @@ LANG="C";
 		clear ;
 		echo -e "\nupdating ..." ;
 		sleep 1;
-		du -h /var/log/*log* | grep -E "M" ;
+		du -h /var/log/*log* | grep -E "K";
 		read -r ;
 done
 fi
