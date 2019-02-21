@@ -11,9 +11,9 @@ LANG="C";
 		while true
 	do
 		clear ;
-		echo -e "\nupdating ..." ;
+		echo -e "\nupdating ...";
 		sleep 1;
-		du -h /var/log/*log* | grep -E "K";
-		read -r ;
+		du -h /var/log/*log* | grep -E "K" ;
+		read -r;
 done
 fi
