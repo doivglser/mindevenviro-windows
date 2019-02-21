@@ -33,9 +33,6 @@ fi
 fi
 # stop END
 
-
-
-
 	# update /etc/hosts
 	configs/./update_hosts &
 	wait ;
