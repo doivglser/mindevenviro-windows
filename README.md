@@ -1,4 +1,4 @@
-# mindevenviro-windows
+# mindevenviro-windows TESTING
 
 * the same scripts like mindevenviro-debian but without X11 - Apps
 
@@ -42,4 +42,14 @@
 
 * "user@host:~/mindevenviro-windows/sudo mde-setup"
 
+# USAGE:
+
 * You can edit your Projects with your favorite IDE, I use in Windows 10: "Notepad++", from within Windows Explorer in the Documents folder.
+
+* check if apache2 is running: "sudo /etc/init.d/apache2 status"
+
+* check if mysql is running: "sudo /etc/init.d/mysql status"
+
+* Run on Windows IE or an other Browser you like: http://127.0.1.1/dwww/ for Debian Manual Pages
+
+* Run on Windows IE or an other Browser you like: http://127.0.1.1/testphp/ for for your PHP stuff.
