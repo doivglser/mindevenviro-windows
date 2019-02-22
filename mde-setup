@@ -2,7 +2,7 @@
 
 # mindevenviro "mde-setup" (install script; "mind eve n viro" SETUP)
 #
-# Windows 10 version compatibility for debian App
+# Windows 10 version compatibility for debian App with the Microsoft Windows Subsystem Linux
 #
 ###			WARNING:	DON'T EDIT ANYTHING BELOW !!!	###
 
@@ -225,7 +225,7 @@ fi
 	chown -R www-data:www-data /var/www/html/ ;
 
 	# Antivirus
-	echo -e "ScanOnAccess True\nOnAccessMountPath /home/$SUDO_USER/Downloads" | tee -a /etc/clamav/clamd.conf ;
+	echo -e "ScanOnAccess True\nOnAccessMountPath /mnt/c/Users" | tee -a /etc/clamav/clamd.conf ;
 
 # mkdir cgi-bin
 mkdir -p /usr/lib/cgi-bin/ 2>/dev/null;

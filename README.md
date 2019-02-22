@@ -2,9 +2,9 @@
 
 * the same scripts like mindevenviro-debian but without X11 - Apps
 
-# M1ND3V3NV1R0 DevOps (testing v0.1.1B)
+# M1ND3V3NV1R0 DevOps (testing v0.0.1B)
 
-		  codecounter: code without blank lines, without comments
+		  codecounter: code without blank lines and without comments
 
 - Lines =1866
 
@@ -47,6 +47,12 @@
 # USAGE:
 
 * You can edit your Projects with your favorite IDE, I use in Windows 10: "Notepad++", from within Windows Explorer in the Documents folder.
+
+* update your Virus definitions: "sudo freshclam"
+
+* start your Antivirus protection for all Users on your Windows machine: "sudo /etc/init.d/clamav-daemon start"
+
+* check if Antivirus is running: "sudo /etc/init.d/clamav-daemon status"
 
 * check if apache2 is running: "sudo /etc/init.d/apache2 status"
 
