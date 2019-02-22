@@ -30,7 +30,7 @@
 
 * do: "pwd" you should be in "/mnt/c/Users/$USER/Documents/"
 
-* user@host:/mnt/c/Users/$USER/Documents/ "git clone git@github.com:doivglser/mindevenviro-windows.git" 
+* user@host:/mnt/c/Users/$USER/Documents/ "git clone https://github.com/doivglser/mindevenviro-windows.git" 
 
 * The above step should clone mindevenviro-windows, in to your Documents folder in Windows 10.
 
