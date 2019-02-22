@@ -5,5 +5,6 @@
 ps aux | grep -v grep | grep clam | cut -f1 -d-
 ps aux | grep -v grep | grep codecounter | cut -f1 -d-
 ps aux | grep -v grep | grep sCRYPt | cut -f1 -d-
+ps aux | grep -v grep | grep sCRYPt | cut -f1 -d-
 ps aux | grep -v grep | grep -v www | grep apache2 | cut -f1 -d-
 ps aux | grep -v grep | grep mysql | cut -f1 -d-
