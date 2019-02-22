@@ -72,4 +72,4 @@
 
 * maintenance/set_mysql_passwd doesn't work anymore
 
-* shield doesn^t work
+* shi3lD doesn't work
