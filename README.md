@@ -40,6 +40,8 @@
 
 * "cd mindevenviro-windows"
 
+* check the entry in the /etc/sudoers file: "cat /etc/sudoers" if your username ist not listed then edit.
+
 * "user@host:~/mindevenviro-windows/sudo mde-setup"
 
 # USAGE:
@@ -49,6 +51,8 @@
 * check if apache2 is running: "sudo /etc/init.d/apache2 status"
 
 * check if mysql is running: "sudo /etc/init.d/mysql status"
+
+* run: "sudo dwww-index++ -f" and "sudo dwww-index++ -i" to update the manual pages for dwww.
 
 * Run on Windows IE or an other Browser you like: http://127.0.1.1/dwww/ for Debian Manual Pages
 
