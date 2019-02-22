@@ -19,15 +19,18 @@ exit 0 ;
 }		
 
 stopmysql(){
+
+		/etc/init.d/mysql stop && wait ;
+
 		killall -15 serv-if-up 2>/dev/null ;
 		
 		for tokill in $(ps aux | grep -v grep | grep -v set_mysql_passwd | grep mysql | awk '{print $2}') ;
 	do
 		kill -9 "$tokill" 2>/dev/null ;
 	done;
-		for tokill in $(ps aux | grep -v grep | grep -v set_mysql_passwd | grep mysqld_safe | awk '{print $2}') ;
+		for tokill3 in $(ps aux | grep -v grep | grep -v set_mysql_passwd | grep mysqld_safe | awk '{print $2}') ;
 	do
-		kill -9 "$tokill" 2>/dev/null ;
+		kill -9 "$tokill3" 2>/dev/null ;
 	done;
 	}
 
@@ -37,7 +40,7 @@ changepass(){
 		stopmysql ;
 		echo "starting mysql to maintenance" ;
 		mysqld_safe --skip-grant-tables &
-		sleep 3 ;
+		wait && sleep 10 ;
 		$mysqlconn -e "use mysql; update mysql.user set password=password('$mysqlnewpass') where user='root';"
 		$mysqlconn -e "use mysql; FLUSH PRIVILEGES;"
 		killall -9 mysqld_safe && wait ; 

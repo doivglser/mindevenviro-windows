@@ -1,9 +1,6 @@
 #!/bin/bash
-
 # mindevenviro "mde-setup" (install script; "mind eve n viro" SETUP)
-#
 # Windows 10 version compatibility for debian App with the Microsoft Windows Subsystem Linux
-#
 ###			WARNING:	DON'T EDIT ANYTHING BELOW !!!	###
 
 LANG="C";
@@ -106,6 +103,15 @@ fi
 	echo -e "\n ... I'm going to install programs\n ... copy sources.list" ;
 	cp -f configs/etc/sources.list /etc/apt/sources.list ;
 
+	# set conf file for mysql maintenance
+	
+		if [ /etc/mysql_cp_db_password.conf -e ];
+	then
+		echo -e "\n/etc/mysql_cp_db_password.conf allready exists\n" ;
+	else
+		cp -f configs/etc/mysql_cp_db_password.conf /etc/mysql_cp_db_password.conf ;
+	fi
+	
 	# to not install systemd related packages
 	echo -e 'Package: *systemd*\nPin: release *\nPin-Priority: -1\n' > /etc/apt/preferences.d/systemd ;
 	# install
