@@ -67,3 +67,7 @@
 * Run on Windows IE or an other Browser you like: http://127.0.1.1/dwww/ for Debian Manual Pages
 
 * Run on Windows IE or an other Browser you like: http://127.0.1.1/testphp/ for for your PHP stuff.
+
+# PROBLEMS
+
+* maintenance/set_mysql_passwd doesn't work anymore
