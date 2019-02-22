@@ -48,6 +48,8 @@
 
 * You can edit your Projects with your favorite IDE, I use in Windows 10: "Notepad++", from within Windows Explorer in the Documents folder.
 
+* run: "sudo sCRYPtUPdater -w 30 testpython/" to check syntax with a workflow interval of 30 minutes in to your testpython folder. (you can use an other folder also.)
+
 * update your Virus definitions: "sudo freshclam"
 
 * start your Antivirus protection for all Users on your Windows machine: "sudo /etc/init.d/clamav-daemon start"
