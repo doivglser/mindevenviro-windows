@@ -26,11 +26,11 @@ stopmysql(){
 		
 		for tokill in $(ps aux | grep -v grep | grep -v set_mysql_passwd | grep mysql | awk '{print $2}') ;
 	do
-		kill -9 "$tokill" 2>/dev/null ;
+		kill -15 "$tokill" 2>/dev/null ;
 	done;
 		for tokill3 in $(ps aux | grep -v grep | grep -v set_mysql_passwd | grep mysqld_safe | awk '{print $2}') ;
 	do
-		kill -9 "$tokill3" 2>/dev/null ;
+		kill -15 "$tokill3" 2>/dev/null ;
 	done;
 	}
 
@@ -38,23 +38,22 @@ changepass(){
 		if	[[ "$mysqlnewpass" != '' ]] ;
 	then
 		stopmysql ;
-		echo "starting mysql to maintenance" ;
-		mysqld_safe --skip-grant-tables &
-		wait && sleep 10 ;
+		echo -e "\nstarting mysqld_safe to maintenance...\n" ;
+		nice -14 setsid mysqld_safe --skip-grant-tables >/dev/null 2> /dev/null &
+		wait && sleep 3 ;
 		$mysqlconn -e "use mysql; update mysql.user set password=password('$mysqlnewpass') where user='root';"
 		$mysqlconn -e "use mysql; FLUSH PRIVILEGES;"
-		killall -9 mysqld_safe && wait ; 
-		echo "... update mysql root passwords" ;
+		killall -15 mysqld_safe && wait && sleep 3 ; 
+		echo -e "\nupdating mysql root passwords...\n" ;
 		sed -i "s/\(p4SSWORD *= *\).*/\1$mysqlnewpass/" /etc/mysql_cp_db_password.conf;
-		echo "starting mysql and serv-if-up";
-		/etc/init.d/mysql start;
-		nice -14 setsid serv-if-up >/dev/null 2> /dev/null &
-		echo "done!";
+		echo -e "\nrestarting mysql...\n";
+		/etc/init.d/mysql start && wait ;
+		echo "\ndone!\n";
 		exit 0;
 	else
 		echo "you must enter a password";
 		echo "USAGE: $0 --help";
-		exit 0;
+		exit 1;
 fi
 }
 
