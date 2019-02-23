@@ -6,11 +6,11 @@
 
 		  codecounter: code without blank lines and without comments
 
-- Lines =1402
+- Lines =1404
 
-- Words =6471
+- Words =6467
 
-- Chars =47506
+- Chars =47483
 
 # Install
 
@@ -22,11 +22,13 @@
 
 * You may need to reboot. 
 
-* After this setting, enter, in the Microsoft Store, linux, choose debian and install it.
+* After this setting, enter, in the Microsoft Store, "linux", choose "debian" and install it.
 
 * Run the Debian app, and type in the command line: "sudo apt-get -y -f --fix-missing install git".
 
-* do: cd /mnt/c/Users/$USER/Documents/ ($USER is your User-Name in Windows and you must run your Windows as administrator.)
+* do: "cd /mnt/c/Users/$USER/Documents/" 
+
+* $USER is your User-Name in Windows and you must run your Windows as administrator.
 
 * do: "pwd" you should be in "/mnt/c/Users/$USER/Documents/"
 
@@ -34,11 +36,13 @@
 
 * The above step should clone mindevenviro-windows, in to your Documents folder in Windows 10.
 
-* do within the Debian App: ln -s /mnt/c/Users/$USER/Documents/mindevenviro-windows /home/$USER/ ($USER in Windows 10 and $USER in the Debian App may differ.)
+* do within the Debian App: "ln -s /mnt/c/Users/$USER/Documents/mindevenviro-windows /home/$USER/"
+
+* $USER in Windows 10 and $USER in the Debian App may differ.
 
 * In your home/$USER/ folder you should have a Sym-link from Documents to your home/$USER/ folder in the Debian App.
 
-* "cd mindevenviro-windows"
+* do: "cd mindevenviro-windows"
 
 * check the entry in the /etc/sudoers file: "cat /etc/sudoers" if your username ist not listed then edit.
 
@@ -48,7 +52,7 @@
 
 * You can edit your Projects with your favorite IDE, I use in Windows 10: "Notepad++", from within Windows Explorer in the Documents folder.
 
-* run: "sudo sCRYPtUPdater -w 30 testpython/" to check syntax with a workflow interval of 30 minutes in to your testpython folder. (you can use an other folder also.)
+* run: "sudo sCRYPtUPdater -w 30 testpython/" to check syntax with a workflow interval of 30 minutes in to your testpython folder.
 
 * run: "ls /usr/local/bin" to see scripts
 
