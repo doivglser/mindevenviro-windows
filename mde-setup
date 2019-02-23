@@ -90,9 +90,9 @@ fi
 	sed -e '/OnAccessMountPath /d' /etc/clamav/clamd.conf  >| $tmpfolder/clamd.conf 2>/dev/null ;
 	cp -f $tmpfolder/clamd.conf /etc/clamav/clamd.conf 2>/dev/null ;
 
-	echo -e "\n ... create /home/$SUDO_USER Directories" ;
-	mkdir -p /home/$SUDO_USER/{testphp,testbash,testperl,testpython} ;
-	chown -R $SUDO_USER:$SUDO_USER /home/$SUDO_USER ;
+	echo -e "\n ... create /home/$SUDO_USER Directories";
+	mkdir -p /home/$SUDO_USER/{testphp,testbash,testperl,testpython,Downloads};
+	chown -R $SUDO_USER:$SUDO_USER /home/$SUDO_USER;
 
 	echo -e "\n ... I'm going to install programs\n ... copy sources.list" ;
 	cp -f configs/etc/sources.list /etc/apt/sources.list ;
