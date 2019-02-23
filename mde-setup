@@ -24,10 +24,6 @@ else
 fi
 # tmp folder END
 
-	# update /etc/hosts
-	configs/./update_hosts &
-	wait ;
-
 		# environinstall
 		if [[ $PWD =~ 'mindevenviro' ]] ;
 	then
