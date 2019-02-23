@@ -6,11 +6,11 @@
 
 		  codecounter: code without blank lines and without comments
 
-- Lines =1412
+- Lines =1419
 
-- Words =6596
+- Words =6628
 
-- Chars =48432
+- Chars =48683
 
 # Install
 
@@ -62,6 +62,8 @@
 
 * check if mysql is running: "sudo /etc/init.d/mysql status"
 
+* check if sendmail is running: "sudo /etc/init.d/sendmail status"
+
 * run: "sudo dwww-index++ -f" and "sudo dwww-index++ -i" to update the manual pages for dwww.
 
 * Run on Windows IE or an other Browser you like: http://127.0.1.1/dwww/ for Debian Manual Pages
@@ -71,7 +73,34 @@
 # FEATURES
 
 ### Antivirus
+* sudo /etc/init.d/clamav-daemon start
 ### Web Server
+* sudo /etc/init.d/apache2 start
 ### MySQL Server
+* sudo /etc/init.d/mysql start
 ### Syntax Checker
+* sudo sCRYPtUPdater --help
 ### Monitors
+* status | logdiskussage
+### MTA
+* sudo /etc/init.d/sendmail start
+
+# Scripts
+
+### sCRYPtUPdater
+### mysql_cp_db
+### set_mysql_passwd
+### mde-setup
+### logdiskussage
+### status
+
+# GNU Tools
+
+### nmon
+### mutt
+### nano
+### mc
+
+# Languages
+
+###  Bash, PHP, MySQL, Python, Perl, HTML
