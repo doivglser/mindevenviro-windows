@@ -6,11 +6,11 @@
 
 		  codecounter: code without blank lines and without comments
 
-- Lines =1401
+- Lines =1409
 
-- Words =6392
+- Words =6436
 
-- Chars =47410
+- Chars =47728
 
 # Install
 
@@ -49,6 +49,8 @@
 * "user@host:~/mindevenviro-windows/sudo ./mde-setup" "sudo ./mde-setup" installs or updates mindevenviro-windows.
 
 # USAGE:
+
+* startup the environment: run: "startup" on new login to Windows 10.
 
 * You can edit your Projects with your favorite IDE, I use in Windows 10: "Notepad++", from within Windows Explorer in the Documents folder.
 

@@ -91,7 +91,19 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
 set -o noclobber
+
+startup(){
+		if [[ "$(status)" = '' ]];
+	then
+		sudo /etc/init.d/mysql start && sudo /etc/init.d/sendmail start && sudo /etc/init.d/clamav-daemon start && sudo /etc/init.d/apache2 start
+	else
+		echo -e "\nenvironment allready startet, type: status if you miss something just quit\r log out and startup again.\n";
+fi
+
+}
+
 # aliass
 alias ls='ls --color=auto -sh'
 alias help='man'
