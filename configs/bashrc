@@ -99,7 +99,7 @@ startup(){
 	then
 		sudo /etc/init.d/mysql start && sudo /etc/init.d/sendmail start && sudo /etc/init.d/clamav-daemon start && sudo /etc/init.d/apache2 start
 	else
-		echo -e "\nenvironment allready startet, type: status if you miss something just quit\r log out and startup again.\n";
+		echo -e "\nenvironment allready startet, type: status if you miss something just quit Debian, log out, log in and startup again.\n";
 fi
 
 }
