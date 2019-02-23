@@ -8,9 +8,9 @@
 
 - Lines =2125
 
-- Words =10990
+- Words =10986
 
-- Chars =73951
+- Chars =73937
 
 # Install
 
