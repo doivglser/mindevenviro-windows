@@ -346,7 +346,7 @@ fi
 help(){
 shift 0 ;
 echo -e "hello $SUDO_USER\n\n BASH/PYTHON to: /usr/local/bin\n PHP to: /var/www/html/testphp\n PERL to: /usr/lib/cgi-bin\n" ;
-echo -e "Usage: $0 [-w|--workflow-interval] [WORKFLOW-INTERVAL in minutes] [work-directorie] \r" ;
+echo -e "Usage: sudo sCRYPtUPdater [-w|--workflow-interval] [WORKFLOW-INTERVAL in minutes] [work-directorie] \r" ;
 exit 0 ;
 }
 # help END
