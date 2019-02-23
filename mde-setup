@@ -24,14 +24,6 @@ else
 fi
 # tmp folder END
 
-		# shutting apps and servers down
-		if [[ "$(ps aux | grep -v grep | grep -v nano | grep -v geany | grep serv-if-up | awk '{print $2}' | wc -l) " -ge "1" ]] ;
-	then
-		killall -15 serv-if-up && wait ;
-		killall -15 shi3lD && wait ;
-fi
-# stop END
-
 	# update /etc/hosts
 	configs/./update_hosts &
 	wait ;

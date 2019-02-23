@@ -1,5 +1,5 @@
 #!/bin/bash
-# mindevenviro start_shield
+# mindevenviro-windows; file updates hosts
 ###     WARNING:    DON'T EDIT ANYTHING BELOW       ###
 
 LANG="C";
@@ -20,7 +20,7 @@ fi
 # tmp folder END
 
 	# update hosts and set the address for apache2 http server
-	sed -e 's/x0x/'$(hostname)'/p' /home/"$SUDO_USER"/mindevenviro/configs/hosts  >| $tmpfolder/hosts 2>/dev/null ;
+	sed -e 's/mindevenviro/'$(hostname)'/p' /home/"$SUDO_USER"/mindevenviro/configs/hosts  >| $tmpfolder/hosts 2>/dev/null ;
 	cp -f $tmpfolder/hosts /etc/hosts 2>/dev/null ;
 	chown root:root /etc/hosts ;
 	chmod 644 /etc/hosts ;
