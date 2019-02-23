@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# mindevenviro "mde-setup" (install script; "mind eve n viro" SETUP)
-#
+# :: mindevenviro "mde-setup" (install script; "mind eve n viro" SETUP)					  ::
+# ::																					  ::
 # Windows 10 version compatibility for debian App with the Microsoft Windows Subsystem Linux
 #
 ###			WARNING:	DON'T EDIT ANYTHING BELOW !!!	###
@@ -99,7 +99,7 @@ fi
 
 	# set conf file for mysql maintenance
 	
-		if [ /etc/mysql_cp_db_password.conf -e ];
+		if [[ "$(ls /etc/*)" =~ mysql_cp_db_password.conf ]];
 	then
 		echo -e "\n/etc/mysql_cp_db_password.conf allready exists\n" ;
 	else
@@ -212,8 +212,7 @@ fi
 	# Apache2 setup
 	echo -e "\n ... set the upload path for PHP scripts" ;
 	rm -f /var/www/html/index*
-	mkdir -p /var/www/html/{testphp,pics} ; 2>/dev/null ;
-	cp -f docs/pics/* /var/www/html/pics/ ;
+	mkdir -p /var/www/html/{testphp,testperl} ; 2>/dev/null ;
 	cp -f docs/manual/* /var/www/html/testphp/ ;
 	chown -R www-data:www-data /var/www/html/ ;
 

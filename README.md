@@ -6,11 +6,11 @@
 
 		  codecounter: code without blank lines and without comments
 
-- Lines =1404
+- Lines =1426
 
-- Words =6468
+- Words =6525
 
-- Chars =47504
+- Chars =48230
 
 # Install
 
@@ -46,7 +46,7 @@
 
 * check the entry in the /etc/sudoers file: "cat /etc/sudoers" if your username ist not listed then edit.
 
-* "user@host:~/mindevenviro-windows/sudo mde-setup"
+* "user@host:~/mindevenviro-windows/sudo ./mde-setup" "sudo ./mde-setup" installs or updates mindevenviro-windows.
 
 # USAGE:
 
