@@ -6,11 +6,11 @@
 
 		  codecounter: code without blank lines and without comments
 
-- Lines =2125
+- Lines =1412
 
-- Words =10986
+- Words =6596
 
-- Chars =73937
+- Chars =48432
 
 # Install
 
@@ -50,7 +50,7 @@
 
 * run: "sudo sCRYPtUPdater -w 30 testpython/" to check syntax with a workflow interval of 30 minutes in to your testpython folder. (you can use an other folder also.)
 
-* run: "ls /usr/local/bin" to see scripts may work
+* run: "ls /usr/local/bin" to see scripts
 
 * update your Virus definitions: "sudo freshclam"
 
@@ -68,8 +68,10 @@
 
 * Run on Windows IE or an other Browser you like: http://127.0.1.1/testphp/ for for your PHP stuff.
 
-# PROBLEMS
+# FEATURES
 
-* maintenance/set_mysql_passwd doesn't work anymore
-
-* shi3lD doesn't work
+### Antivirus
+### Web Server
+### MySQL Server
+### Syntax Checker
+### Monitors

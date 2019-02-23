@@ -10,7 +10,7 @@ LANG=C ;
 		echo "please sudo"
 		exit 0 ;
 	else
-		mysqlconn="sudo mysql -u root";
+		mysqlconn="mysql -u root";
 help(){
 shift 0 ;
 echo -e "hello $SUDO_USER\nset new mariadb root password\n" ;
@@ -35,20 +35,33 @@ stopmysql(){
 	}
 
 changepass(){
+
 		if	[[ "$mysqlnewpass" != '' ]] ;
 	then
 		stopmysql ;
-		echo -e "\nstarting mysqld_safe to maintenance...\n" ;
-		nice -14 setsid mysqld_safe --skip-grant-tables >/dev/null 2> /dev/null &
-		wait && sleep 3 ;
-		$mysqlconn -e "use mysql; update mysql.user set password=password('$mysqlnewpass') where user='root';"
-		$mysqlconn -e "use mysql; FLUSH PRIVILEGES;"
+		
+		echo -e "\nstarting mysqld_safe to maintenance, please wait...\n" ;
+		
+		sudo mysqld_safe --skip-grant-tables 2> /dev/null &
+		
+		sleep 15 ;
+
+		echo -e "\nGoing to change the password\n" ;
+
+		$mysqlconn -e "use mysql; update mysql.user set password=password('$mysqlnewpass') where user='root';" && sleep 3;
+		$mysqlconn -e "use mysql; FLUSH PRIVILEGES;" && sleep 3 ;
+		
+		sleep 3 ;
+		
 		killall -15 mysqld_safe && wait && sleep 3 ; 
+		
 		echo -e "\nupdating mysql root passwords...\n" ;
 		sed -i "s/\(p4SSWORD *= *\).*/\1$mysqlnewpass/" /etc/mysql_cp_db_password.conf;
+		
 		echo -e "\nrestarting mysql...\n";
 		/etc/init.d/mysql start && wait ;
-		echo "\ndone!\n";
+		
+		echo -e "\ndone!\n";
 		exit 0;
 	else
 		echo "you must enter a password";
