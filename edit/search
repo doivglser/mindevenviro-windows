@@ -116,18 +116,16 @@ searchStat(){
 }
 
 help_function(){
-echo -e "Usage: search [-s|--search] [TOSEARCH] -g [TOGREP] -e [TOEXCLUDE]\r
+echo -e "Usage: search [-s|--search] [PATH] [TOSEARCH] [TOGREP] [TOEXCLUDE]\r
 sudo this script:\r
 SEARCH THE DRIVE\n
  This script searches your drive\r
  for everything in it, and displays\r
  only text in the less viewer.\r
  Finds: log files, example code, etc.\n
- -s: search flag\r
+ [PATH]: the absolute path like: /var/
  [TOSEARCH]: search pattern\r
- -g: to grep in file flag\r
  [TOGREP]: search a word in file\r
- -e: to exclude from search results flag\r
  [TOEXCLUDE]: a word you want to exclude from your search results.\n" ;
 exit 0 ;
 }
