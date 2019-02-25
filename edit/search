@@ -1,5 +1,6 @@
 #!/bin/bash
 # mindevenviro-windows search
+# I use dos2unix to convert file endings
 ###     WARNING:    DON'T EDIT ANYTHING BELOW	###
 
 LANG="C";

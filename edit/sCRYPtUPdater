@@ -2,6 +2,8 @@
 
 # mindevenviro-windows sCRYPtUPdater
 # syntax check and update to /urs/local/bin, /var/www/testphp, /usr/lib/cgi-bin
+# I use dos2unix to convert file endings
+#
 ###     WARNING:    DON'T EDIT ANYTHING BELOW	###
 
 LANG="C" ;

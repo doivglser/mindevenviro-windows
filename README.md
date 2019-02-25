@@ -6,13 +6,15 @@
 
 		  codecounter: code without blank lines and without comments
 
-- Lines =1398
+- Lines =1399
 
-- Words =6512
+- Words =6517
 
-- Chars =47907
+- Chars =47825
 
 # Install
+
+### download https://sourceforge.net/projects/dos2unix/ to convert line endings to unix.
 
 * Make a shortcut on the desktop, right-click, New, shortcut, write powershell and click Next. 
 * A new link is created. Right-click on the Powershell shortcut and run as administrator. 
