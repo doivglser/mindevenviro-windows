@@ -111,4 +111,6 @@ alias upload='git status && git add . && git commit -a'
 alias upgrade='sudo apt-get update && sudo apt-get upgrade && sudo apt-get clean && sudo apt autoremove'
 alias emptmail='truncate -s 0 /var/mail/ivo'
 alias | sed -n 's/alias //p ;' ;
+echo "" ;
 cd && pwd && date ;
+echo -e "\nHello $USER, type startup, to start servers and antivirus. have a good Day!\n";
