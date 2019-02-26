@@ -27,6 +27,7 @@ echo -e "codecounter $(date) :: as $SUDO_USER :: in $(uname -n) :: changed: $lin
 sleep 1
 exit 0 ;
 else
-echo -e " ... this script updates the lines, words and chars of\n ... executable code in the mindevenviro-windows folder\n ... you must contribute to mindevenviro-windows\r" ;
+	# updating the lines in README.md
+	echo -e "\n ... CODECOUNTER ... updating the lines in README.md, just hit Enter" ;
 exit 0 ;
 fi

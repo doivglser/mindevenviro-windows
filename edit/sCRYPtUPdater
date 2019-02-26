@@ -303,13 +303,12 @@ fi
 }
 
 exxiterr(){
+	# if contributor, update the README.md with code stats
+	codecounter &
 	# User Host Control
 	echo -e "sCRYPtUPdater $(date) :: as ${SUDO_USER} :: in $(uname -n) :: changed:\n $(cat $tmpfolder/modified)" >> "/home/$SUDO_USER/.wH0rUNSon" ;
 	# User Host Control END
-	echo "good by $SUDO_USER."
-	# if contributor, update the README.md with code stats
-	codecounter &
-	wait ;
+	echo "good by $SUDO_USER." ;
 	exit 0 ;
 	}
 
@@ -347,8 +346,9 @@ fi
 # HELP
 help(){
 shift 0 ;
-echo -e "hello $SUDO_USER\n\n BASH/PYTHON to: /usr/local/bin\n PHP to: /var/www/html/testphp\n PERL to: /usr/lib/cgi-bin\n" ;
-echo -e "Usage: sudo sCRYPtUPdater [-w|--workflow-interval] [WORKFLOW-INTERVAL in minutes] [work-directorie] \r" ;
+echo -e "hello $SUDO_USER\n\n BASH/PYTHON to: /usr/local/bin\r PHP to: /var/www/html/testphp\r PERL to: /usr/lib/cgi-bin\r"
+echo -e "\n To diff, check syntax and to update, just hit Enter, \"n\" to not update to path, \"ok\" if you want to edit in the shell with nano.\r" ;
+echo -e "\n Usage: sudo sCRYPtUPdater [-w|--workflow-interval] [WORKFLOW-INTERVAL in minutes] [work-directorie] \n" ;
 exit 0 ;
 }
 # help END

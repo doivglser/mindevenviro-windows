@@ -54,10 +54,10 @@ echo "searchStat function"
 exitHandl3R(){
 echo "exitHandl3R function"
 	searchStat;
-	pgrep $FILE | awk "{print $1}" | xargs kill -15 && wait && 
-	pgrep less | awk "{print $1}" | xargs kill -15 && wait &&
-	pgrep nano | awk "{print $1}" | xargs kill -15 && wait &&
-	pgrep mupdf | awk "{print $1}" | xargs kill -15 && wait ;
+	pgrep $FILE | awk "{print $1}" | xargs kill -15 &&  
+	pgrep less | awk "{print $1}" | xargs kill -15 && 
+	pgrep nano | awk "{print $1}" | xargs kill -15 && 
+	pgrep mupdf | awk "{print $1}" | xargs kill -15 ;
 	echo -e "\n ... good bye $SUDO_USER" ;
 	exit 0 ;
 }
@@ -68,34 +68,17 @@ echo "display function"
 			# uS3F is the owner of the file
 			uS3F=$(ls -sl "$line" | awk '{print $4}' | tr -d '\ ');
 ###
-			if [[ $(echo $tmpfolder/line.search | xargs wc -l | cut -f1 -d /) != "1" ]] ;
+			if [[ $(echo "$filename" | xargs ls) =~ .conf ]] ;
 		then
-			if [[ ! $(echo "$line" | xargs file) =~ PDF ]] && [[ ! $(echo "$line" | xargs ls) =~ .conf ]] ;
-		then
-			pause=1 ;
-			sudo -u "$uS3F" less "$line" && return ;
-		else
-			if [[ $(dpkg -l | grep mupdf | awk '{print $2}') != '' ]] && [[ $(echo "$line" | xargs file) =~ PDF ]] ;
-		then
-			pause=1 ;
-			sudo -u "$uS3F" mupdf "$line" && return ;
-		else
-			pause=1 ;
-			echo -e " ... no PDF viewer installed, or you are in Windows \r" ;
-			echo -e " ... $(echo $line | xargs file) :: - nothing to show\r" ;
-		fi
-	fi
-###
-			if [[ $(echo "$line" | xargs ls) =~ .conf ]] ;
-		then
-			echo -e " ... do you want to edit $line ?, type ok, or just hit return if not." && read -p -r ;
+			echo -e " ... do you want to edit $filename ?, type ok, or just hit return if not.\n" ;
+			read -p $REPLY ;
 			
 				if [[ $REPLY = "ok" ]];
 			then
 				pause=1 ;
-				sudo -u "$uS3F" nano "$line" && return ;
+				sudo -u "$uS3F" nano "$filename" && return ;
 			else
-				if [[ ! $(echo "$line" | xargs file) =~ PDF|PHP|script|ASCII|text|TEXT|HTML|XML ]] ;
+				if [[ ! $(echo "$filename" | xargs file) =~ PDF|PHP|script|ASCII|text|TEXT|HTML|XML ]] ;
 			then
 				pause=1 ;
 				echo -e " ... no PDF|PHP|script|ASCII|text|TEXT|HTML|XML \r" ;
@@ -104,6 +87,25 @@ echo "display function"
 				echo -e " ... $(echo $filename | xargs file) :: - nothing to show\r" ;
 		fi
 	fi
+###
+			if [[ $(echo $tmpfolder/line.search | xargs wc -l | cut -f1 -d /) != "1" ]] ;
+		then
+			if [[ ! $(echo "$filename" | xargs file) =~ PDF ]] && [[ ! $(echo "$filename" | xargs ls) =~ .conf ]] ;
+		then
+			pause=1 ;
+			sudo -u "$uS3F" less "$line" && return ;
+		else
+			if [[ $(dpkg -l | grep mupdf | awk '{print $2}') != '' ]] && [[ $(echo "$filename" | xargs file) =~ PDF ]] ;
+		then
+			pause=1 ;
+			sudo -u "$uS3F" mupdf "$filename" && return ;
+		else
+			pause=1 ;
+			echo -e " ... no PDF viewer installed, or you are in Windows \r" ;
+			echo -e " ... $(echo $filename | xargs file) :: - nothing to show\r" ;
+		fi
+	fi
+###
 fi
 				else
 					return ;
@@ -129,7 +131,7 @@ echo "eingabe function"
 		echo $filename >> "$tmpfolder/line.search" ;
 		line="$tmpfolder/line.search" ;
 		echo -e  "\n ... continue?\n "; 
-		read ;
+		read -p $REPLY
 		display ;
 
 		elif [[ "$exclud3" != '' ]] && [[ "$togrep" != '' ]] ;
@@ -139,7 +141,7 @@ echo "eingabe function"
 		echo $filename >> "$tmpfolder/line.search" ;
 		line="$tmpfolder/line.search" ;
 		echo -e  "\n ... continue?\n ";
-		read ;
+		read -p $REPLY
 		display ;
 	fi
 fi
