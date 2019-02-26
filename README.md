@@ -6,11 +6,11 @@
 
 		  codecounter: code without blank lines and without comments
 
-- Lines =1435
+- Lines =1443
 
-- Words =6700
+- Words =6727
 
-- Chars =48948
+- Chars =49205
 
 # Install
 
@@ -52,7 +52,9 @@
 
 # Problems
 
-* search script "search" doesn't work. (testing, not updated since mindevenviro-fanciful)
+### testing
+
+* search script "search" doesn't work properely.
 
 # USAGE:
 

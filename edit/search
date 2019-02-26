@@ -6,15 +6,15 @@
 
 ###     WARNING:    DON'T EDIT ANYTHING BELOW	###
 
-set -x
+#set -x
 
 LANG="C";
 IFS="$(echo -en "\n\b")" ;
 FILE="search";
 line='';
 pause=0;
-readonly empty='' ;
-
+#readonly empty=" empty" ;
+#[[ $(echo $tmpfolder/line.search | xargs file | cut -f2 -d:) = $empty ]] ||
 			if [[ "$EUID" != 0 ]] ;
 		then
 	echo -e "sudo search -h :: please\n" ;
@@ -68,7 +68,7 @@ echo "display function"
 			# uS3F is the owner of the file
 			uS3F=$(ls -sl "$line" | awk '{print $4}' | tr -d '\ ');
 ###
-			if [[ $(echo "$line" | xargs file) != $empty ]]
+			if [[ $(echo $tmpfolder/line.search | xargs wc -l | cut -f1 -d /) != "1" ]] ;
 		then
 			if [[ ! $(echo "$line" | xargs file) =~ PDF ]] && [[ ! $(echo "$line" | xargs ls) =~ .conf ]] ;
 		then
@@ -97,11 +97,11 @@ echo "display function"
 			else
 				if [[ ! $(echo "$line" | xargs file) =~ PDF|PHP|script|ASCII|text|TEXT|HTML|XML ]] ;
 			then
-				pause=0 ;
+				pause=1 ;
 				echo -e " ... no PDF|PHP|script|ASCII|text|TEXT|HTML|XML \r" ;
 			else
-				pause=0 ;
-				echo -e " ... $(echo $line | xargs file) :: - nothing to show\r" ;
+				pause=1 ;
+				echo -e " ... $(echo $filename | xargs file) :: - nothing to show\r" ;
 		fi
 	fi
 fi
@@ -124,16 +124,22 @@ echo "eingabe function"
 	then
 		if [[ "$togrep" != '' ]] && [[ "$exclud3" = '' ]] ;
 	then
+		filename=$line;
 		cat $line | grep -E $togrep >| "$tmpfolder/line.search" ;
+		echo $filename >> "$tmpfolder/line.search" ;
 		line="$tmpfolder/line.search" ;
-		read -p -r "continue? ";
+		echo -e  "\n ... continue?\n "; 
+		read ;
 		display ;
 
 		elif [[ "$exclud3" != '' ]] && [[ "$togrep" != '' ]] ;
 	then
+		filename=$line;
 		cat $line | grep -E $togrep | grep -vE $exclud3 >| "$tmpfolder/line.search" ;
+		echo $filename >> "$tmpfolder/line.search" ;
 		line="$tmpfolder/line.search" ;
-		read -p -r "continue? " ; 
+		echo -e  "\n ... continue?\n ";
+		read ;
 		display ;
 	fi
 fi
@@ -141,13 +147,17 @@ fi
 	then
 		if [[ "$togrep" != '' ]] && [[ "$exclud3" = '' ]] ;
 	then
+		filename=$line;
 		cat $line | grep -E $togrep >| "$tmpfolder/line.search" ;
+		echo $filename >> "$tmpfolder/line.search" ;
 		line="$tmpfolder/line.search" ;
 		display ;
 
 		elif [[ "$exclud3" != '' ]] && [[ "$togrep" != '' ]] ;
 	then
+		filename=$line;
 		cat $line | grep -E $togrep | grep -vE $exclud3 >| "$tmpfolder/line.search" ;
+		echo $filename >> "$tmpfolder/line.search" ;
 		line="$tmpfolder/line.search" ;
 		display ;
 	fi
