@@ -52,9 +52,9 @@
 
 # Problems
 
-### testing
+### testing search script "search"
 
-* search script "search" doesn't work properely.
+* I Received SIGHUP or SIGTERM while trying to open less or nano...
 
 # USAGE:
 

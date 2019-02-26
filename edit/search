@@ -1,21 +1,13 @@
 #!/bin/bash
-
 # mindevenviro-windows search
-
 # I use dos2unix to convert file endings
-
-###     WARNING:    DON'T EDIT ANYTHING BELOW	###
-
+###	WARNING: DON'T EDIT ANYTHING BELOW ###
 #set -x
-
 LANG="C";
 IFS="$(echo -en "\n\b")" ;
-FILE="search";
 line='';
-pause=0;
-#readonly empty=" empty" ;
-#[[ $(echo $tmpfolder/line.search | xargs file | cut -f2 -d:) = $empty ]] ||
-			if [[ "$EUID" != 0 ]] ;
+pause="0";
+			if [[ "$EUID" != "0" ]] ;
 		then
 	echo -e "sudo search -h :: please\n" ;
 	help_function ;
@@ -46,67 +38,56 @@ exit 0 ;
 }
 
 searchStat(){
-echo "searchStat function"
+#echo "searchStat function"
 	echo -e "search $(date) :: as $SUDO_USER :: in $(uname -n) :: $path $exclud3 $togrep $exclud3 ::" >>"/home/$SUDO_USER/.wH0rUNSon" && wait ;
 }
 
 #exithandler
 exitHandl3R(){
-echo "exitHandl3R function"
+#echo "exitHandl3R function"
 	searchStat;
-	pgrep $FILE | awk "{print $1}" | xargs kill -15 &&  
-	pgrep less | awk "{print $1}" | xargs kill -15 && 
-	pgrep nano | awk "{print $1}" | xargs kill -15 && 
-	pgrep mupdf | awk "{print $1}" | xargs kill -15 ;
+	pgrep less | awk "{print $1}" | xargs kill -15 2>/dev/null ; 
+	pgrep nano | awk "{print $1}" | xargs kill -15 2>/dev/null ; 
+	pgrep mupdf | awk "{print $1}" | xargs kill -15 2>/dev/null ;
 	echo -e "\n ... good bye $SUDO_USER" ;
 	exit 0 ;
 }
 
 display(){
-echo "display function"
+#echo "display function"
 # display	
 			# uS3F is the owner of the file
-			uS3F=$(ls -sl "$line" | awk '{print $4}' | tr -d '\ ');
+			uS3F=$(ls -sl "$filename" | awk '{print $4}' | tr -d '\ ');
 ###
-			if [[ $(echo "$filename" | xargs ls) =~ .conf ]] ;
+			if [[ $(echo "$filename" | xargs basename | sed 's/\./\ /g' | awk '{print $2}') =~ conf|ini|config ]] ;
 		then
-			echo -e " ... do you want to edit $filename ?, type ok, or just hit return if not.\n" ;
-			read -p $REPLY ;
-			
-				if [[ $REPLY = "ok" ]];
-			then
-				pause=1 ;
+				pause="1" ;
 				sudo -u "$uS3F" nano "$filename" && return ;
-			else
+
 				if [[ ! $(echo "$filename" | xargs file) =~ PDF|PHP|script|ASCII|text|TEXT|HTML|XML ]] ;
 			then
-				pause=1 ;
+				pause="1" ;
 				echo -e " ... no PDF|PHP|script|ASCII|text|TEXT|HTML|XML \r" ;
 			else
-				pause=1 ;
+				pause="1" ;
 				echo -e " ... $(echo $filename | xargs file) :: - nothing to show\r" ;
 		fi
-	fi
 ###
-			if [[ $(echo $tmpfolder/line.search | xargs wc -l | cut -f1 -d /) != "1" ]] ;
+			if [[ ! $(echo "$filename" | xargs basename | sed 's/\./\ /g' | awk '{print $2}') =~ conf|ini|config ]] ;
 		then
-			if [[ ! $(echo "$filename" | xargs file) =~ PDF ]] && [[ ! $(echo "$filename" | xargs ls) =~ .conf ]] ;
-		then
-			pause=1 ;
+			pause="1" ;
 			sudo -u "$uS3F" less "$line" && return ;
 		else
 			if [[ $(dpkg -l | grep mupdf | awk '{print $2}') != '' ]] && [[ $(echo "$filename" | xargs file) =~ PDF ]] ;
 		then
-			pause=1 ;
+			pause="1" ;
 			sudo -u "$uS3F" mupdf "$filename" && return ;
 		else
-			pause=1 ;
+			pause="1" ;
 			echo -e " ... no PDF viewer installed, or you are in Windows \r" ;
 			echo -e " ... $(echo $filename | xargs file) :: - nothing to show\r" ;
 		fi
 	fi
-###
-fi
 				else
 					return ;
 fi
@@ -114,15 +95,13 @@ fi
 #display END
 }
 
-# search query
-eingabe(){
-echo "eingabe function"
-
-		trap 'exitHandl3R' SIGINT ;
+# search query 1
+eingabe1(){
+#echo "eingabe function 2"
 
 		while read line
 	do
-		if [[ $pause = 1 ]] ;
+		if [ $pause = 1 ] ;
 	then
 		if [[ "$togrep" != '' ]] && [[ "$exclud3" = '' ]] ;
 	then
@@ -130,8 +109,8 @@ echo "eingabe function"
 		cat $line | grep -E $togrep >| "$tmpfolder/line.search" ;
 		echo $filename >> "$tmpfolder/line.search" ;
 		line="$tmpfolder/line.search" ;
-		echo -e  "\n ... continue?\n "; 
-		read -p $REPLY
+		printf " ... continue ... " ; read -p -r ;
+		wait ;
 		display ;
 
 		elif [[ "$exclud3" != '' ]] && [[ "$togrep" != '' ]] ;
@@ -140,12 +119,21 @@ echo "eingabe function"
 		cat $line | grep -E $togrep | grep -vE $exclud3 >| "$tmpfolder/line.search" ;
 		echo $filename >> "$tmpfolder/line.search" ;
 		line="$tmpfolder/line.search" ;
-		echo -e  "\n ... continue?\n ";
-		read -p $REPLY
+		printf " ... continue ... " ; read -p -r ;
+		wait ;
 		display ;
 	fi
 fi
-		if [[ $pause = 0 ]] ;
+done<<<"$line";
+}
+
+# search query 2
+eingabe2(){
+#echo "eingabe function 2"
+
+		while read line
+	do
+		if [ $pause = 0 ] ;
 	then
 		if [[ "$togrep" != '' ]] && [[ "$exclud3" = '' ]] ;
 	then
@@ -170,17 +158,28 @@ done<<<"$line";
 
 # Main function
 main(){
-echo "main function"
+#echo "main function"
 searchP4th="$2";
 searchP4ttern="$3";
 togrep="$4";
 exclud3="$5";
+					trap 'exitHandl3R' SIGINT ;
 
-			if [[ "$togrep" != '' ]] || [[ "$exclud3" != '' ]] ;
+			if  [[ "$exclud3" != '' ]] || [[ "$togrep" != '' ]] ;
 		then
 				for line in $(find $searchP4th -name *$searchP4ttern* -type f) ;
 			do
-				eingabe ;
+				if [ $pause = 1 ] ;
+			then
+				printf " ... to continue: " ; read -r ;
+				eingabe1 ;
+			fi
+			
+				if [ $pause = 0 ] ;
+			then
+				printf " ... to continue: " ; read -r ;
+				eingabe2 ;
+			fi
 			done
 	else
 			help_function ;
@@ -202,3 +201,6 @@ fi
 esac
 # ASK END
 fi
+
+#readonly empty=" empty" ;
+#[[ $(echo $tmpfolder/line.search | xargs file | cut -f2 -d:) = $empty ]] ||
