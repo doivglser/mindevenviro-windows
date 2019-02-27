@@ -50,12 +50,6 @@
 
 * "user@host:~/mindevenviro-windows/sudo ./mde-setup" "sudo ./mde-setup" installs or updates mindevenviro-windows.
 
-# Problems
-
-### testing search script "search"
-
-* to open nano, less, or mupdf, test statements semantic errors...
-
 # USAGE:
 
 * startup the environment: run: "startup" on new login to Windows 10.
@@ -86,14 +80,16 @@
 
 # FEATURES
 
+### Syntax Checker
+* sudo sCRYPtUPdater --help
+### Search script, uses find, nano, less, mupdf(not in windows)
+* sudo search --help
 ### Antivirus
 * sudo /etc/init.d/clamav-daemon start
 ### Web Server
 * sudo /etc/init.d/apache2 start
 ### MySQL Server
 * sudo /etc/init.d/mysql start
-### Syntax Checker
-* sudo sCRYPtUPdater --help
 ### Monitors
 * status | logdiskussage
 ### MTA
@@ -101,6 +97,7 @@
 
 # Scripts
 
+### search
 ### sCRYPtUPdater
 ### mysql_cp_db
 ### set_mysql_passwd

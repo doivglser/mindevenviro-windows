@@ -59,13 +59,13 @@ display(){
 			# uS3F is the owner of the file
 			uS3F=$(ls -sl "$filename" | awk '{print $4}' | tr -d '\ ');
 ###
-			if [[ $(echo "$filename" | xargs basename | sed 's/\./\ /g' | awk '{print $2}') =~ conf|ini|config ]] ;
-		then
+				if [[ $(echo "$filename" | xargs basename | sed 's/\./\ /g' | awk '{print $2}') =~ 'conf'|'ini'|'config' ]] ;
+			then
 				pause="1" ;
 				opener="nano";
 				return ;
 
-				if [[ ! $(echo "$filename" | xargs file) =~ PDF|PHP|script|ASCII|text|TEXT|HTML|XML ]] ;
+				elif [[ ! $(echo "$filename" | xargs file) =~ PDF|PHP|script|ASCII|text|TEXT|HTML|XML ]] ;
 			then
 				pause="0" ;
 				echo -e " ... no PDF|PHP|script|ASCII|text|TEXT|HTML|XML \r" ;
@@ -74,13 +74,13 @@ display(){
 				echo -e " ... $(echo $filename | xargs file) :: - nothing to show\r" ;
 		fi
 ###
-			if [[ ! $(echo "$filename" | xargs basename | sed 's/\./\ /g' | awk '{print $2}') =~ conf|ini|config ]] ;
+			if [[ ! $(echo "$filename" | xargs basename | sed 's/\./\ /g' | awk '{print $2}') =~ 'conf'|'ini'|'config' ]] ;
 		then
 			pause="1" ;
 			opener="less";
 			return ;
-		else
-			if [[ $(dpkg -l | grep mupdf | awk '{print $2}') != '' ]] && [[ $(echo "$filename" | xargs file) =~ PDF ]] ;
+		
+			elif [[ $(dpkg -l | grep mupdf | awk '{print $2}') != '' ]] && [[ $(echo "$filename" | xargs file) =~ PDF ]] ;
 		then
 			pause="1" ;
 			opener="mupdf";
@@ -90,10 +90,6 @@ display(){
 			echo -e " ... no PDF viewer installed, or you are in Windows \r" ;
 			echo -e " ... $(echo $filename | xargs file) :: - nothing to show\r" ;
 		fi
-	fi
-				else
-					return ;
-fi
 ###
 #display END
 }
