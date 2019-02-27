@@ -126,3 +126,11 @@
 # Thanks
 
 ### Google, StackExchange, GitHub
+
+# Screenshots
+
+![](https://raw.githubusercontent.com/doivglser/mindevenviro-windows/master/docs/startup_01.jpg)
+![](https://raw.githubusercontent.com/doivglser/mindevenviro-windows/master/docs/notepadplusplusconvert2unix.png)
+![](https://raw.githubusercontent.com/doivglser/mindevenviro-windows/master/docs/scritpupdater.png)
+![](https://raw.githubusercontent.com/doivglser/mindevenviro-windows/master/docs/searchscript.png)
+![](https://raw.githubusercontent.com/doivglser/mindevenviro-windows/master/docs/whorunson.png)
