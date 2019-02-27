@@ -81,7 +81,7 @@ display(){
 				echo -e " ... no PDF|PHP|script|ASCII|text|TEXT|HTML|XML \r" ;
 			else
 				pause="0" ;
-				echo -e " ... $(echo $filename | xargs file) :: - nothing to show\r" ;
+				echo -e " ... $(echo $filename | xargs file) ::\r" ;
 		fi
 ###
 			if [[ ! $(echo "$filename" | xargs basename | sed 's/\./\ /g' | awk '{print $2}') =~ 'conf'|'ini'|'config' ]] \
@@ -99,7 +99,7 @@ display(){
 		else
 			pause="0" ;
 			echo -e " ... no PDF viewer installed, or you are in Windows \r" ;
-			echo -e " ... $(echo $filename | xargs file) :: - nothing to show\r" ;
+			echo -e " ... $(echo $filename | xargs file) ::\r" ;
 		fi
 ###
 #display END

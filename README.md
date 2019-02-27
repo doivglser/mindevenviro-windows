@@ -6,11 +6,11 @@
 
 		  codecounter: code without blank lines and without comments
 
-- Lines =1443
+- Lines =1432
 
-- Words =6742
+- Words =6695
 
-- Chars =49242
+- Chars =49069
 
 # Install
 
@@ -95,6 +95,12 @@
 * status | logdiskussage
 ### MTA
 * sudo /etc/init.d/sendmail start
+
+# Files
+
+### .wH0rUNSon
+
+* log file in $HOME
 
 # Scripts
 

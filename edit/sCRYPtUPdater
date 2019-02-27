@@ -304,7 +304,9 @@ fi
 
 exxiterr(){
 	# if contributor, update the README.md with code stats
+	echo -e " updating lines words and chars in README.md" ;
 	codecounter &
+	wait ;
 	# User Host Control
 	echo -e "sCRYPtUPdater $(date) :: as ${SUDO_USER} :: in $(uname -n) :: changed:\n $(cat $tmpfolder/modified)" >> "/home/$SUDO_USER/.wH0rUNSon" ;
 	# User Host Control END
