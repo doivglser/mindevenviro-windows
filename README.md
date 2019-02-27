@@ -83,6 +83,7 @@
 ### Syntax Checker
 * sudo sCRYPtUPdater --help
 ### Search script, uses find, nano, less, mupdf(not in windows)
+### "dd" magic number test statement, converting the null byte in the pipeline
 * sudo search --help
 ### Antivirus
 * sudo /etc/init.d/clamav-daemon start
@@ -115,3 +116,7 @@
 # Languages
 
 ###  Bash, PHP, MySQL, Python, Perl, HTML
+
+# Thanks
+
+### Google, StackExchange, GitHub

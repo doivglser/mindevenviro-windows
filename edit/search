@@ -2,7 +2,7 @@
 # mindevenviro-windows search
 # I use dos2unix to convert file endings
 ###	WARNING: DON'T EDIT ANYTHING BELOW ###
-#set -x
+
 LANG="C";
 IFS="$(echo -en "\n\b")" ;
 line='';
@@ -59,13 +59,23 @@ display(){
 			# uS3F is the owner of the file
 			uS3F=$(ls -sl "$filename" | awk '{print $4}' | tr -d '\ ');
 ###
-				if [[ $(echo "$filename" | xargs basename | sed 's/\./\ /g' | awk '{print $2}') =~ 'conf'|'ini'|'config' ]] ;
+				if [[ $(echo "$filename" | xargs basename | sed 's/\./\ /g' | awk '{print $2}') =~ 'conf'|'ini'|'config' ]] \
+				&& [[ ! $(echo "$filename" | xargs file) =~ 'shared'|'dynamically'|'interpreter' ]]; # to not open binaries
 			then
 				pause="1" ;
 				opener="nano";
 				return ;
 
-				elif [[ ! $(echo "$filename" | xargs file) =~ PDF|PHP|script|ASCII|text|TEXT|HTML|XML ]] ;
+				# count with dd magic number 20 to determine the file type to be editet and not to open binaries
+				elif [[ $(dd if="$filename" bs=20 count=1 | tr '\0' '\n') =~ 'bash'|'perl'|'php'|'python'|'sh' ]] \
+				&& [[ ! $(echo "$filename" | xargs file) =~ 'shared'|'dynamically'|'interpreter' ]];
+			then
+				pause="1" ;
+				opener="nano";
+				return ;
+
+				elif [[ ! $(echo "$filename" | xargs file) =~ PDF|PHP|script|ASCII|text|TEXT|HTML|XML ]] \
+				&& [[ ! $(echo "$filename" | xargs file) =~ 'shared'|'dynamically'|'interpreter' ]];
 			then
 				pause="0" ;
 				echo -e " ... no PDF|PHP|script|ASCII|text|TEXT|HTML|XML \r" ;
@@ -74,7 +84,8 @@ display(){
 				echo -e " ... $(echo $filename | xargs file) :: - nothing to show\r" ;
 		fi
 ###
-			if [[ ! $(echo "$filename" | xargs basename | sed 's/\./\ /g' | awk '{print $2}') =~ 'conf'|'ini'|'config' ]] ;
+			if [[ ! $(echo "$filename" | xargs basename | sed 's/\./\ /g' | awk '{print $2}') =~ 'conf'|'ini'|'config' ]] \
+				&& [[ ! $(echo "$filename" | xargs file) =~ 'shared'|'dynamically'|'interpreter' ]] ;
 		then
 			pause="1" ;
 			opener="less";
@@ -106,15 +117,22 @@ eingabe(){
 		cat $line | grep -E $togrep >| "$tmpfolder/line.search" ;
 		echo $filename >> "$tmpfolder/line.search" ;
 		line="$tmpfolder/line.search" ;
+		
+		if [[ ! $(echo $tmpfolder/line.search | xargs file | cut -f2 -d:) =~ '(no magic)'|'empty' ]];
+	then
 		display ;
-
+fi
 		elif [[ "$exclud3" != '' ]] && [[ "$togrep" != '' ]] ;
 	then
 		filename=$line;
 		cat $line | grep -E $togrep | grep -vE $exclud3 >| "$tmpfolder/line.search" ;
 		echo $filename >> "$tmpfolder/line.search" ;
 		line="$tmpfolder/line.search" ;
+		
+		if [[ ! $(echo $tmpfolder/line.search | xargs file | cut -f2 -d:) =~ '(no magic)'|'empty' ]];
+	then
 		display ;
+	fi
 fi
 done<<<"$line";
 }
@@ -168,6 +186,3 @@ fi
 esac
 # ASK END
 fi
-
-#readonly empty=" empty" ;
-#[[ $(echo $tmpfolder/line.search | xargs file | cut -f2 -d:) = $empty ]] ||
