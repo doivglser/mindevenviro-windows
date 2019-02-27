@@ -54,7 +54,7 @@
 
 ### testing search script "search"
 
-* I Received SIGHUP or SIGTERM while trying to open less or nano...
+* to open nano, less, or mupdf, test statements semantic errors...
 
 # USAGE:
 
