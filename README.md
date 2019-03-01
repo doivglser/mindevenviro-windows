@@ -6,11 +6,11 @@
 
 		  codecounter: code without blank lines and without comments
 
-- Lines =1464
+- Lines =1466
 
-- Words =6869
+- Words =6892
 
-- Chars =51176
+- Chars =51354
 
 # Install
 
@@ -134,3 +134,8 @@
 ![](https://raw.githubusercontent.com/doivglser/mindevenviro-windows/master/docs/scritpupdater.png)
 ![](https://raw.githubusercontent.com/doivglser/mindevenviro-windows/master/docs/searchscript.png)
 ![](https://raw.githubusercontent.com/doivglser/mindevenviro-windows/master/docs/whorunson.png)
+
+# PROBLEMS
+
+* ERROR: ScanOnAccess: fanotify_init failed: Function not implemented
+* The workaround from mindevenviro-fanciful doesn't work within the Debian App, the ERROR message persists.
