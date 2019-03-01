@@ -7,7 +7,7 @@
 ###			WARNING:	DON'T EDIT ANYTHING BELOW !!!	###
 
 LANG="C";
-myPrograms="tidy mercurial libjson-glib-dev zip rar openssl nmap clamav-freshclam clamav-milter clamav-testfiles clamdscan clamassassin clamav clamav-base clamav-daemon php7.0 php7.0-cli php7.0-mcrypt php7.0-intl php7.0-mysql php7.0-curl php7.0-gd php7.0-soap php7.0-xml php7.0-zip php7.0-readline php7.0-opcache php7.0-json php7.0-gd dwww apache2 libmariadbclient-dev-compat default-libmysqlclient-dev mariadb-client mariadb-common mariadb-server sendmail python-gtk2-dbg liblwp-protocol-socks-perl libcgi-pm-perl perl nmon figlet mc mutt nano " ;
+myPrograms="tidy mercurial libjson-glib-dev zip rar openssl nmap clamav-freshclam clamav-milter clamav-testfiles clamdscan clamassassin clamav clamav-base clamav-daemon apparmor-utils php7.0 php7.0-cli php7.0-mcrypt php7.0-intl php7.0-mysql php7.0-curl php7.0-gd php7.0-soap php7.0-xml php7.0-zip php7.0-readline php7.0-opcache php7.0-json php7.0-gd dwww apache2 libmariadbclient-dev-compat default-libmysqlclient-dev mariadb-client mariadb-common mariadb-server sendmail python-gtk2-dbg liblwp-protocol-socks-perl libcgi-pm-perl perl nmon figlet mc mutt nano " ;
 environinstall="monitors/codecounter monitors/status monitors/logdiskussage edit/search edit/sCRYPtUPdater maintenance/mysql_cp_db maintenance/set_mysql_passwd mde-setup " ;
 readonly empty='';
 		if [ ! $EUID = 0 ];
@@ -79,11 +79,31 @@ fi
 	cp -f $tmpfolder/apache2.conf /etc/apache2/apache2.conf 2>/dev/null ;
 
 	# by an update clear from double entries in clamd.conf
+	sed -e '/User /d' /etc/clamav/clamd.conf  >| $tmpfolder/clamd.conf 2>/dev/null ;
+	cp -f $tmpfolder/clamd.conf /etc/clamav/clamd.conf 2>/dev/null ;
+
+	# by an update clear from double entries in clamd.conf
 	sed -e '/ScanOnAccess /d' /etc/clamav/clamd.conf  >| $tmpfolder/clamd.conf 2>/dev/null ;
 	cp -f $tmpfolder/clamd.conf /etc/clamav/clamd.conf 2>/dev/null ;
 
 	# by an update clear from double entries in clamd.conf
 	sed -e '/OnAccessMountPath /d' /etc/clamav/clamd.conf  >| $tmpfolder/clamd.conf 2>/dev/null ;
+	cp -f $tmpfolder/clamd.conf /etc/clamav/clamd.conf 2>/dev/null ;
+	
+	# by an update clear from double entries in clamd.conf
+	sed -e '/OnAccessPrevention /d' /etc/clamav/clamd.conf  >| $tmpfolder/clamd.conf 2>/dev/null ;
+	cp -f $tmpfolder/clamd.conf /etc/clamav/clamd.conf 2>/dev/null ;
+
+	# by an update clear from double entries in clamd.conf
+	sed -e '/OnAccessExtraScanning /d' /etc/clamav/clamd.conf  >| $tmpfolder/clamd.conf 2>/dev/null ;
+	cp -f $tmpfolder/clamd.conf /etc/clamav/clamd.conf 2>/dev/null ;
+	
+	# by an update clear from double entries in clamd.conf
+	sed -e '/OnAccessExcludeUID /d' /etc/clamav/clamd.conf  >| $tmpfolder/clamd.conf 2>/dev/null ;
+	cp -f $tmpfolder/clamd.conf /etc/clamav/clamd.conf 2>/dev/null ;
+	
+	# by an update clear from double entries in clamd.conf
+	sed -e '/VirusEvent /d' /etc/clamav/clamd.conf  >| $tmpfolder/clamd.conf 2>/dev/null ;
 	cp -f $tmpfolder/clamd.conf /etc/clamav/clamd.conf 2>/dev/null ;
 
 	echo -e "\n ... create /home/$SUDO_USER Directories";
@@ -213,7 +233,17 @@ fi
 	chown -R www-data:www-data /var/www/html/ ;
 
 	# Antivirus
-	echo -e "ScanOnAccess True\nOnAccessMountPath /mnt/c/Users" | tee -a /etc/clamav/clamd.conf ;
+	cp -f configs/clamd-response /etc/clamav/virusevent.d/clamd-response
+	echo "User root" | tee -a /etc/clamav/clamd.conf ;
+	echo "ScanOnAccess true" | tee -a /etc/clamav/clamd.conf ;
+	echo "OnAccessMountPath /" | tee -a /etc/clamav/clamd.conf ;
+	echo "OnAccessMountPath /mnt/c/Users/" | tee -a /etc/clamav/clamd.conf ;
+	echo "OnAccessPrevention false" | tee -a /etc/clamav/clamd.conf ;
+	echo "OnAccessExtraScanning true" | tee -a /etc/clamav/clamd.conf ;
+	echo "OnAccessExcludeUID 0" | tee -a /etc/clamav/clamd.conf ;
+	echo "VirusEvent /etc/clamav/virusevent.d/clamd-response" | tee -a /etc/clamav/clamd.conf ;
+	aa-complain clamd ;
+	wait ;
 
 # mkdir cgi-bin
 mkdir -p /usr/lib/cgi-bin/ 2>/dev/null;
