@@ -6,11 +6,11 @@
 
 		  codecounter: code without blank lines and without comments
 
-- Lines =1466
+- Lines =1470
 
-- Words =6892
+- Words =6909
 
-- Chars =51354
+- Chars =51128
 
 # Install
 
