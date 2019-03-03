@@ -1,16 +1,12 @@
-# mindevenviro-windows TESTING
-
-* the same scripts like mindevenviro-debian but without X11 - Apps
-
-# M1ND3V3NV1R0 DevOps (testing v0.0.1B)
+# M1ND3V3NV1R0-WINDOWS DevOps (testing v0.0.1B)
 
 		  codecounter: code without blank lines and without comments
 
-- Lines =1470
+- Lines =1445
 
-- Words =6909
+- Words =6715
 
-- Chars =51128
+- Chars =49317
 
 # Install
 
@@ -60,12 +56,6 @@
 
 * run: "ls /usr/local/bin" to see scripts
 
-* update your Virus definitions: "sudo freshclam"
-
-* start your Antivirus protection for all Users on your Windows machine: "sudo /etc/init.d/clamav-daemon start"
-
-* check if Antivirus is running: "sudo /etc/init.d/clamav-daemon status"
-
 * check if apache2 is running: "sudo /etc/init.d/apache2 status"
 
 * check if mysql is running: "sudo /etc/init.d/mysql status"
@@ -83,10 +73,8 @@
 ### Syntax Checker
 * sudo sCRYPtUPdater --help
 ### Search script, uses find, nano, less, mupdf(not in windows)
-### "dd" magic number test statement, converting the null byte in the pipeline
+* "dd" magic number test statement, converting the null byte in the pipeline
 * sudo search --help
-### Antivirus
-* sudo /etc/init.d/clamav-daemon start
 ### Web Server
 * sudo /etc/init.d/apache2 start
 ### MySQL Server
@@ -134,8 +122,3 @@
 ![](https://raw.githubusercontent.com/doivglser/mindevenviro-windows/master/docs/scritpupdater.png)
 ![](https://raw.githubusercontent.com/doivglser/mindevenviro-windows/master/docs/searchscript.png)
 ![](https://raw.githubusercontent.com/doivglser/mindevenviro-windows/master/docs/whorunson.png)
-
-# PROBLEMS
-
-* ERROR: ScanOnAccess: fanotify_init failed: Function not implemented
-* The workaround from mindevenviro-fanciful doesn't work within the Debian App, the ERROR message persists.
