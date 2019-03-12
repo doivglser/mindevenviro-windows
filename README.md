@@ -1,6 +1,8 @@
-# M1ND3V3NV1R0-WINDOWS DevOps (testing v0.0.1B)
+# M1ND3V3NV1R0-WINDOWS DevOps 1.0.0
 
-		  codecounter: code without blank lines and without comments
+		codecounter: code without blank lines 
+		and without comments, but not yet
+		updated because of mexx
 
 - Lines =1445
 
